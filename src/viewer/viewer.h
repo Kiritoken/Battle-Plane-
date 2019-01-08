@@ -8,6 +8,7 @@
 #include <string>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "../GameScene/game_scene.h"
 
 enum GameState{
     READY,
@@ -45,10 +46,11 @@ private:
 
 
     static GameState state;
+    GameScene* gameScene;
     /**
     * 循环
     */
-    static void update(  );
+    void update(  );
 
     //事件处理
     static void err_callback( int error, const char* description );

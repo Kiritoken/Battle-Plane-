@@ -16,6 +16,7 @@ size_t Viewer::buffer_h;
 GameState Viewer::state=READY;
 
 
+
 Viewer::Viewer(std::string title):_title(title){}
 
 //析构函数
@@ -24,6 +25,7 @@ Viewer::~Viewer() {
     glfwTerminate();
 
     //TODO 释放堆上空间
+    delete gameScene;
 }
 
 
@@ -78,6 +80,12 @@ void Viewer::init() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glViewport( 0 ,0 , DEFAULT_W , DEFAULT_H );
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-DEFAULT_W/2,DEFAULT_W/2,-DEFAULT_H/2,DEFAULT_H/2);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
 
     // resize components to current window size, get DPI
     glfwGetFramebufferSize(window, (int*) &buffer_w, (int*) &buffer_h );
@@ -86,6 +94,8 @@ void Viewer::init() {
 
     // resize elements to current size
     resize_callback(window, (int)buffer_w, (int)buffer_h);
+
+    gameScene=new GameScene(DEFAULT_W,DEFAULT_H);
 
     state=READY;
 }
@@ -104,7 +114,7 @@ void Viewer::update() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //背景色
-    glClearColor(0.0,0.0,0.0,0.0);
+    glClearColor(1.0,1.0,1.0,0.0);
 
     //TODO 游戏场景渲染&游戏逻辑
     switch (state){
@@ -113,6 +123,7 @@ void Viewer::update() {
             break;
         case PLAYING:
            // cout<<"PLAYING"<<endl;
+           gameScene->render();
             break;
         case PAUSE:
             //cout<<"PAUSE"<<endl;
@@ -121,6 +132,9 @@ void Viewer::update() {
            // cout<<"GAMEOVER"<<endl;
             break;
     }
+
+
+
     //swap buffers
     glfwSwapBuffers(window);
 

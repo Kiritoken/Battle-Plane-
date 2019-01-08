@@ -38,4 +38,4 @@ LINK_LIBRARIES(dl)
 LINK_LIBRARIES(GLEW)
 LINK_LIBRARIES(GL)
 
-add_executable(EBattle_Plane src/main.cpp src/viewer/viewer.cpp src/viewer/viewer.h)
+add_executable(EBattle_Plane src/main.cpp src/viewer/viewer.cpp src/viewer/viewer.h src/GameScene/game_scene.cpp src/GameScene/game_scene.h)
