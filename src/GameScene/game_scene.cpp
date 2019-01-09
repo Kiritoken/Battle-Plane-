@@ -8,29 +8,31 @@
 #include <GL/glew.h>
 
 GameScene::GameScene(int width,int height) {
-    backgroundImage="../res/image/background1.bmp";
+    backgroundImage="../res/image/background5.bmp";
     this->width=width/2;
     this->height=height/2;
 
+    //速度
     velocity=0.001;
-    acceleration=1;
-    direction_flag= false;
+    //加速度
+    //acceleration=0.00001;
+    acceleration=0;
     reset_uv();
 
     glGenTextures(1, &texture);
     //绑定纹理
     glBindTexture(GL_TEXTURE_2D, texture);
     // 为当前绑定的纹理对象设置环绕、过滤方式
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
-    int iwidth, iheight, nrChannels;
-    unsigned char *data = stbi_load(backgroundImage.c_str(), &iwidth, &iheight, &nrChannels, 4);
+    int i_width, i_height, nrChannels;
+    unsigned char *data = stbi_load(backgroundImage.c_str(), &i_width, &i_height, &nrChannels, 4);
     if (data){
         //生成纹理
-        glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA8, iwidth, iheight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA8, i_width, i_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         //glGenerateMipmap(GL_TEXTURE_2D);
     }else{
         std::cout << "背景图片加载失败" << std::endl;
@@ -76,30 +78,16 @@ void GameScene::render() {
 }
 
 void GameScene::update_uv() {
-    if(right_down.x>1.0&&right_down.y>1.0){
-        acceleration*=10;
-        std::cout<<"加速"<<std::endl;
+    float distance=unit_distance();
+    if(left_up.y>1.0)
         reset_uv();
-        return;
-    }
-    if(right_down.y<1.0){
-        left_up.y+=velocity*acceleration;
-        right_up.y+=velocity*acceleration;
-        right_down.y+=velocity*acceleration;
-        left_down.y+=velocity*acceleration;
-    }else{
-/*        left_up.y=0;
-        right_up.y=0;
-        right_down.y=float(height)/1000;
-        left_down.y=float(height)/1000;
-
-        left_up.x+=float(width)/1000;
-        right_up.x+=float(width)/1000;
-        right_down.x+=float(width)/1000;
-        left_down.x+=float(width)/1000;*/
-        reset_uv();
-    }
+    left_down.y+=distance;
+    right_down.y+=distance;
+    left_up.y+=distance;
+    right_up.y+=distance;
 }
+
+
 
 void GameScene::reset_uv() {
 /*    left_up=glm::vec2(0.0,0.0);
@@ -119,4 +107,25 @@ void GameScene::print() {
     std::cout<<right_up.x<<" "<<right_up.y<<" ";
     std::cout<<right_down.x<<" "<<right_down.y<<" ";
     std::cout<<left_down.x<<" "<<left_down.y<<std::endl;
+}
+
+
+//单位时间内的位移
+float GameScene::unit_distance() {
+    //位移
+    float distance;
+
+    //匀速 velocity*t
+    if(acceleration==0){
+        distance = velocity;
+    }else{
+        distance=float(velocity+0.5*acceleration);
+        //更新速度
+        velocity+=acceleration;
+    }
+    if(velocity<=0){
+        velocity=0;
+        acceleration=0;
+    }
+    return distance;
 }

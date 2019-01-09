@@ -13,6 +13,12 @@ public:
     GameScene(int width,int height);
     ~GameScene();
     void render();
+
+    //设定速度＆加速度
+    float getVelocity() { return velocity; }
+    void setVelovity(float value){ velocity=value>0 ? value:0; }
+    float getAcceleration() { return acceleration;}
+    void setAcceleration(float value) {acceleration=value;}
 private:
     std::string backgroundImage;
     unsigned int texture;
@@ -31,12 +37,12 @@ private:
     //加速度
     float acceleration;
 
-    //判断是否向下遍历
-    bool direction_flag;
-
     void reset_uv();
     void update_uv();
     void print();
+
+    //计算单位时间内的位移
+    float unit_distance();
 };
 
 
