@@ -6,6 +6,19 @@
 #define EBATTLE_PLANE_FLYING_OBJECT_H
 
 
+enum FLYING_DIRECTION{
+    LEFT,
+    UP,
+    LEFT_UP,
+    RIGHT,
+    DOWN,
+    RIGHT_UP,
+    LEFT_DOWN,
+    RIGHT_DOWN,
+    STOP
+};
+
+
 class FlyingObject{
 public:
     FlyingObject (float _x,float _y,float width,float height):x(_x),y(_y),
@@ -62,8 +75,9 @@ protected:
     float f_width;
     float f_height;
 
+    FLYING_DIRECTION direction=STOP;
     //速度与加速度
-    float velocity=10;
+    float velocity=5;
     float acceleration=0;
 
     //ＨＰ　＆　Attack Power

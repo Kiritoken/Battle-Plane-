@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <GLFW/glfw3.h>
+#include <cmath>
 #include "player_plane.h"
 #include "../utilis/stb_image.h"
 
@@ -13,7 +14,7 @@
 PlayerPlane::PlayerPlane(float _x, float _y, float width, float height):
                         FlyingObject(_x,_y,width,height)
 {
-    std::string backgroundImage="../res/image/plane1.png";
+    std::string backgroundImage="../res/image/plane23.png";
 
     glGenTextures(1, &this->texture);
     //绑定纹理
@@ -34,6 +35,10 @@ PlayerPlane::PlayerPlane(float _x, float _y, float width, float height):
         std::cout << "背景图片加载失败" << std::endl;
     }
     stbi_image_free(data);
+
+    setVelocity(10);
+   //setAcceleration(1.0);
+
 }
 
 void PlayerPlane::move(float _x, float _y) {
@@ -47,11 +52,12 @@ bool PlayerPlane::detectCollision(FlyingObject *flyingObject) {
 }
 
 void PlayerPlane::render() {
+
     //启用纹理
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
     //颜色混合模式
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glBegin(GL_QUADS);
     /**
      * UV 纹理坐标系，原点在坐上　ｘ轴向右　ｙ轴向下
@@ -69,6 +75,8 @@ void PlayerPlane::render() {
     glEnd();
     glFlush();
     glDisable(GL_TEXTURE_2D);
+
+    move();
 }
 
 float PlayerPlane::getX() {
@@ -120,23 +128,107 @@ void PlayerPlane::decreaseVelocity() {}
 void PlayerPlane::decreaseAcceleration() {}
 
 
+
+//TODO 添加斜方向
 void PlayerPlane::keyboard_event(int key, int action, int mods) {
+
     if (action == GLFW_PRESS|| action==GLFW_REPEAT){
-         switch (key){
-         case 'w':case 'W':
-             move(x,y+5);
-             break;
-         case 'a':case 'A':
-             move(x-5,y);
-             break;
-         case 's':case 'S':
-             move(x,y-5);
-             break;
-         case 'd':case 'D':
-             move(x+5,y);
-             break;
-         default:
-             break;
-         }
+     //   std::cout<<"按下"<<char(key)<<std::endl;
+       if(key=='W'||key=='A'||key=='S'||key=='D')
+        pressed[key]=true;
+    }
+    //松开
+    if(action==GLFW_RELEASE){
+        pressed[key]=false;
+     //   std::cout<<"松开"<<key<<std::endl;
+    }
+    confirmDIrection();
+}
+
+void PlayerPlane::confirmDIrection() {
+    bool bL=pressed['A'];
+    bool bR=pressed['D'];
+    bool bU=pressed['W'];
+    bool bD=pressed['S'];
+
+    if(bL && !bU && !bR && !bD) direction = LEFT;
+    else if(bL && bU && !bR && !bD) direction = LEFT_UP;
+    else if(!bL && bU && !bR && !bD) direction = UP;
+    else if(!bL && bU && bR && !bD) direction = RIGHT_UP;
+    else if(!bL && !bU && bR && !bD) direction = RIGHT;
+    else if(!bL && !bU && bR && bD) direction = RIGHT_DOWN;
+    else if(!bL && !bU && !bR && bD) direction = DOWN;
+    else if(bL && !bU && !bR && bD) direction = LEFT_DOWN;
+    else if(!bL && !bU && !bR && !bD) direction = STOP;
+
+    //std::cout<<direction<<std::endl;
+}
+
+
+void PlayerPlane::move() {
+    //x轴位移
+    float distance_x;
+    //y轴位移
+    float distance_y;
+
+    switch(direction){
+        case LEFT:
+            distance_x=float(velocity+0.5*acceleration);
+            //更新速度
+            velocity+=acceleration;
+            x-=distance_x;
+            break;
+        case RIGHT:
+            distance_x=float(velocity+0.5*acceleration);
+            //更新速度
+            velocity+=acceleration;
+            x+=distance_x;
+            break;
+        case UP:
+            distance_y=float(velocity+0.5*acceleration);
+            velocity+=acceleration;
+            y+=distance_y;
+            break;
+        case DOWN:
+            distance_y=float(velocity+0.5*acceleration);
+            velocity+=acceleration;
+            y-=distance_y;
+            break;
+        case LEFT_UP:
+            std::cout<<"左上"<<std::endl;
+            distance_x=float((velocity+0.5*acceleration)*0.707106781);
+            distance_y=distance_x;
+            x-=distance_x;
+            y+=distance_y;
+            velocity+=acceleration;
+            break;
+        case LEFT_DOWN:
+            std::cout<<"左下"<<std::endl;
+            distance_x=float((velocity+0.5*acceleration)*0.707106781);
+            distance_y=distance_x;
+            x-=distance_x;
+            y-=distance_y;
+            velocity+=acceleration;
+            break;
+        case RIGHT_UP:
+            std::cout<<"右上"<<std::endl;
+            distance_x=float((velocity+0.5*acceleration)*0.707106781);
+            distance_y=distance_x;
+            x+=distance_x;
+            y+=distance_y;
+            velocity+=acceleration;
+            break;
+        case RIGHT_DOWN:
+            std::cout<<"右下"<<std::endl;
+            distance_x=float((velocity+0.5*acceleration)*0.707106781);
+            distance_y=distance_x;
+            x+=distance_x;
+            y-=distance_y;
+            velocity+=acceleration;
+            break;
+        case STOP:
+            velocity=10;
+            break;
     }
 }
+

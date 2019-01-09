@@ -6,6 +6,7 @@
 #define EBATTLE_PLANE_PLAYER_PLANE_H
 
 #include "flying_object.h"
+#include <vector>
 
 //玩家战机
 class PlayerPlane :public FlyingObject{
@@ -16,6 +17,8 @@ public:
 
     //移动
     void move(float _x,float _y) override;
+
+    void move();
 
     //TODO 射击
 
@@ -49,7 +52,8 @@ public:
     void keyboard_event(int key, int action, int mods) override;
 
 private:
-
+    bool pressed[349]={0};
+    void confirmDIrection();
 };
 
 

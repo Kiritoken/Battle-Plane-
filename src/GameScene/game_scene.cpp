@@ -13,7 +13,7 @@ GameScene::GameScene() {
 }
 
 void GameScene::init(int width, int height) {
-    backgroundImage="../res/image/background3.bmp";
+    backgroundImage="../res/image/background6.bmp";
     this->width=width/2;
     this->height=height/2;
 
