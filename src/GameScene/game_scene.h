@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include "../glm/glm.hpp"
+#include "../object/player_plane.h"
 
 class GameScene {
 public:
@@ -61,6 +62,10 @@ private:
 
     //计算单位时间内的位移
     float unit_distance();
+
+
+    //playerplane
+    FlyingObject* playerPlane;
 };
 
 

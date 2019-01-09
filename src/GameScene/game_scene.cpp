@@ -13,7 +13,7 @@ GameScene::GameScene() {
 }
 
 void GameScene::init(int width, int height) {
-    backgroundImage="../res/image/background5.bmp";
+    backgroundImage="../res/image/background3.bmp";
     this->width=width/2;
     this->height=height/2;
 
@@ -43,25 +43,23 @@ void GameScene::init(int width, int height) {
         std::cout << "背景图片加载失败" << std::endl;
     }
     stbi_image_free(data);
+
+    std::cout<<"初始化战机中......"<<std::endl;
+    playerPlane=new PlayerPlane(0,0,82,82);
+    std::cout<<"战机初始化完毕"<<std::endl;
 }
 
 GameScene::~GameScene() {
-
+   delete playerPlane;
 }
 
 void GameScene::render() {
-
-
     //启用纹理
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
     //颜色混合模式
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-
     glBegin(GL_QUADS);
-
-
     /**
      * UV 纹理坐标系，原点在坐上　ｘ轴向右　ｙ轴向下
      *
@@ -78,8 +76,9 @@ void GameScene::render() {
     glEnd();
     glFlush();
     glDisable(GL_TEXTURE_2D);
-
     update_uv();
+
+    playerPlane->render();
 }
 
 void GameScene::update_uv() {
@@ -148,4 +147,5 @@ void GameScene::keyboard_event(int key, int action, int mods) {
             decreaseAcceration();
         }
     }
+    playerPlane->keyboard_event(key,action,mods);
 }
