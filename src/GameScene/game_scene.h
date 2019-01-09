@@ -36,6 +36,7 @@ private:
 
     void reset_uv();
     void update_uv();
+    void print();
 };
 
 

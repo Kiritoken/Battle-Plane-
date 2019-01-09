@@ -8,7 +8,7 @@
 #include <GL/glew.h>
 
 GameScene::GameScene(int width,int height) {
-    backgroundImage="../res/image/level1.jpg";
+    backgroundImage="../res/image/background1.bmp";
     this->width=width/2;
     this->height=height/2;
 
@@ -21,16 +21,16 @@ GameScene::GameScene(int width,int height) {
     //绑定纹理
     glBindTexture(GL_TEXTURE_2D, texture);
     // 为当前绑定的纹理对象设置环绕、过滤方式
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
     int iwidth, iheight, nrChannels;
-    unsigned char *data = stbi_load(backgroundImage.c_str(), &iwidth, &iheight, &nrChannels, 0);
+    unsigned char *data = stbi_load(backgroundImage.c_str(), &iwidth, &iheight, &nrChannels, 4);
     if (data){
         //生成纹理
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, iwidth, iheight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA8, iwidth, iheight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         //glGenerateMipmap(GL_TEXTURE_2D);
     }else{
         std::cout << "背景图片加载失败" << std::endl;
@@ -48,7 +48,8 @@ void GameScene::render() {
     //启用纹理
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
-  //  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    //颜色混合模式
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 
     glBegin(GL_QUADS);
@@ -58,6 +59,7 @@ void GameScene::render() {
      * UV 纹理坐标系，原点在坐上　ｘ轴向右　ｙ轴向下
      *
      */
+    //print();
     //左上
     glTexCoord2f(left_up.x, left_up.y); glVertex3f(-width,height,0.0f);
     //右上
@@ -75,8 +77,8 @@ void GameScene::render() {
 
 void GameScene::update_uv() {
     if(right_down.x>1.0&&right_down.y>1.0){
-      //  acceleration*=10;
-        //std::cout<<"加速"<<std::endl;
+        acceleration*=10;
+        std::cout<<"加速"<<std::endl;
         reset_uv();
         return;
     }
@@ -86,21 +88,35 @@ void GameScene::update_uv() {
         right_down.y+=velocity*acceleration;
         left_down.y+=velocity*acceleration;
     }else{
-        left_up.y=0;
-        right_up.y=float(width)/10000;
-        right_down.y=float(width)/10000;
-        left_down.y=0;
+/*        left_up.y=0;
+        right_up.y=0;
+        right_down.y=float(height)/1000;
+        left_down.y=float(height)/1000;
 
-        left_up.x+=velocity*acceleration;
-        right_up.x+=velocity*acceleration;
-        right_down.x+=velocity*acceleration;
-        left_down.x+=velocity*acceleration;
+        left_up.x+=float(width)/1000;
+        right_up.x+=float(width)/1000;
+        right_down.x+=float(width)/1000;
+        left_down.x+=float(width)/1000;*/
+        reset_uv();
     }
 }
 
 void GameScene::reset_uv() {
+/*    left_up=glm::vec2(0.0,0.0);
+    right_up=glm::vec2(float(width)/1000,0.0);
+    right_down=glm::vec2(float(width)/1000,float(height)/1000);
+    left_down=glm::vec2(0.0,float(height)/1000);*/
+
     left_up=glm::vec2(0.0,0.0);
-    right_up=glm::vec2(float(width)/10000,0.0);
-    right_down=glm::vec2(float(width)/10000,float(height)/10000);
-    left_down=glm::vec2(0.0,float(height)/10000);
+    right_up=glm::vec2(1.0,0.0);
+    right_down=glm::vec2(1.0,float(height)/1000);
+    left_down=glm::vec2(0.0,float(height)/1000);
+}
+
+
+void GameScene::print() {
+    std::cout<<left_up.x<<" "<<left_up.y<<" ";
+    std::cout<<right_up.x<<" "<<right_up.y<<" ";
+    std::cout<<right_down.x<<" "<<right_down.y<<" ";
+    std::cout<<left_down.x<<" "<<left_down.y<<std::endl;
 }
