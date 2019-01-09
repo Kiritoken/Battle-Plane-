@@ -46,7 +46,7 @@ private:
 
 
     static GameState state;
-    GameScene* gameScene;
+    static GameScene* gameScene;
     /**
     * 循环
     */

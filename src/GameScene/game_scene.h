@@ -10,8 +10,10 @@
 
 class GameScene {
 public:
-    GameScene(int width,int height);
+    GameScene();
     ~GameScene();
+
+    void init(int width,int height);
     void render();
 
     //设定速度＆加速度
@@ -19,6 +21,22 @@ public:
     void setVelovity(float value){ velocity=value>0 ? value:0; }
     float getAcceleration() { return acceleration;}
     void setAcceleration(float value) {acceleration=value;}
+
+    void addVelocity(){ velocity+=0.0001; }
+    void decreaseVelocity(){ velocity-=0.0001; }
+    void addAcceration(){ acceleration+=0.000001; }
+    void decreaseAcceration(){ acceleration-=0.000001; }
+
+
+    /**
+     * 键盘
+     * @param key
+     * @param scancode
+     * @param action  GLFW_RELEASE 松开 GLFW_PRESS 按下 GLFW_REPEAT 重复，一直按着
+     * @param mods    GLFW_MOD_SHIFT 按下Shift键 GLFW_MOD_CONTROL 按下Ctrl键
+     */
+    void keyboard_event(int key, int action, int mods);
+
 private:
     std::string backgroundImage;
     unsigned int texture;

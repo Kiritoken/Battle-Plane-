@@ -6,8 +6,13 @@
 #include "game_scene.h"
 #include <iostream>
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-GameScene::GameScene(int width,int height) {
+GameScene::GameScene() {
+
+}
+
+void GameScene::init(int width, int height) {
     backgroundImage="../res/image/background5.bmp";
     this->width=width/2;
     this->height=height/2;
@@ -128,4 +133,19 @@ float GameScene::unit_distance() {
         acceleration=0;
     }
     return distance;
+}
+
+
+void GameScene::keyboard_event(int key, int action, int mods) {
+    if (action == GLFW_PRESS){
+        if(key==GLFW_KEY_PAGE_UP){
+           addVelocity();
+        }else if(key==GLFW_KEY_PAGE_DOWN){
+            decreaseVelocity();
+        }else if(key==GLFW_KEY_HOME){
+            addAcceration();
+        }else if(key==GLFW_KEY_END){
+            decreaseAcceration();
+        }
+    }
 }

@@ -14,7 +14,7 @@ size_t Viewer::buffer_w;
 size_t Viewer::buffer_h;
 
 GameState Viewer::state=READY;
-
+GameScene* Viewer::gameScene=new GameScene();
 
 
 Viewer::Viewer(std::string title):_title(title){}
@@ -95,8 +95,7 @@ void Viewer::init() {
     // resize elements to current size
     resize_callback(window, (int)buffer_w, (int)buffer_h);
 
-    gameScene=new GameScene(DEFAULT_W,DEFAULT_H);
-
+    gameScene->init(DEFAULT_W,DEFAULT_H);
     state=READY;
 }
 
@@ -191,5 +190,5 @@ void Viewer::key_callback( GLFWwindow* window,int key, int scancode, int action,
     }
 
     //TODO 游戏逻辑处理
-   //renderer->keyboard_event( key, action, mods );
+   gameScene->keyboard_event( key, action, mods );
 }
