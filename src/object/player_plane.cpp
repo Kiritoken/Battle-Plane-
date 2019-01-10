@@ -19,7 +19,7 @@
 PlayerPlane::PlayerPlane(float _x, float _y, float width, float height):
                         FlyingObject(_x,_y,width,height)
 {
-    std::string backgroundImage="../res/image/plane23.png";
+    std::string backgroundImage="../res/image/plane28.png";
 
     glGenTextures(1, this->texture);
     //绑定纹理
@@ -42,8 +42,12 @@ PlayerPlane::PlayerPlane(float _x, float _y, float width, float height):
     stbi_image_free(data);
 
     setVelocity(10);
-    setShootingSpeedInterval(2);
+    setShootingSpeedInterval(10);
    //setAcceleration(1.0);
+
+}
+
+PlayerPlane::~PlayerPlane() {
 
 }
 
@@ -337,7 +341,7 @@ void PlayerPlane::shootBullet() {
     if(shooting){
         if(shootingSpeedInterval<=frameCount) {
             //new bullet 添加到ＧameScene中去
-            auto bullet = BulletFactory::getBullet(x, float(y + f_height * 0.5), 6);
+            auto bullet = BulletFactory::getBullet(x, float(y + f_height * 0.5), 11);
             if (bullet) {
                 bullet->setDirection(UP);
                 GameObject::bulletSet.push_back(bullet);

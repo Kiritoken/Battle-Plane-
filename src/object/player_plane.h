@@ -14,7 +14,7 @@ class PlayerPlane :public FlyingObject{
 public:
     //构造函数
     PlayerPlane(float _x,float _y,float width,float height);
-    ~PlayerPlane(){}
+     ~PlayerPlane();
 
     //移动
     void move(float _x,float _y) override;

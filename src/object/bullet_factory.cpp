@@ -52,13 +52,12 @@ void BulletFactory::loadBullet() {
 
 
 
-Bullet* BulletFactory::getBullet(float _x, float _y,unsigned int level) {
+shared_ptr<Bullet> BulletFactory::getBullet(float _x, float _y,unsigned int level) {
 
     if(level>bulletArray.size())
         return nullptr;
     else {
-        Bullet *bullet = new Bullet(_x, _y,bulletArray[level].b_width,bulletArray[level].b_height,bulletArray[level]._texture);
-
+        shared_ptr<Bullet> bullet(new Bullet(_x, _y,bulletArray[level].b_width,bulletArray[level].b_height,bulletArray[level]._texture));
         //TODO json 数据　加速度　速度
         bullet->setVelocity(15.0f);
         bullet->setAcceleration(0.0f);

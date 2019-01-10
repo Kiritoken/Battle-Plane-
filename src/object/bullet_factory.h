@@ -8,6 +8,7 @@
 #include "bullet.h"
 #include <vector>
 #include <string>
+#include <memory>
 using namespace std;
 
 
@@ -24,7 +25,7 @@ struct BulletInfo{
 class BulletFactory {
 public:
     static void loadBullet();
-    static Bullet* getBullet(float _x, float _y ,unsigned int level);
+    static shared_ptr<Bullet> getBullet(float _x, float _y ,unsigned int level);
 private:
     static vector<BulletInfo> bulletArray;
     static GLuint texID[100];

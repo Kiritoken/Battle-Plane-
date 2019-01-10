@@ -14,7 +14,7 @@ public:
     //构造函数
     Bullet(float _x,float _y,float width,float height,unsigned int* _texture);
 
-    ~Bullet();
+    ~Bullet() override;
     //移动
     void move(float _x,float _y) override;
 
@@ -59,6 +59,8 @@ public:
     void updateBBox() override;
 
     //bool frinedly;
+
+private:
 };
 
 

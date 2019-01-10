@@ -41,7 +41,7 @@ public:
         right_down=glm::vec2(float(x+f_width*0.5),float(y-f_height*0.5));
     }
 
-   ~FlyingObject(){ delete texture;}
+    virtual ~FlyingObject();
     //移动
     virtual void move(float _x,float _y) =0;
     virtual void updateBBox()=0;
