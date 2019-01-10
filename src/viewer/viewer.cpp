@@ -3,7 +3,6 @@
 //
 #include <iostream>
 #include "viewer.h"
-#include "../object/bullet_factory.h"
 #include "../utilis/constant.h"
 
 using namespace std;
@@ -100,7 +99,6 @@ void Viewer::init() {
 
     //TODO　初始化GameScene
     gameScene->init(Constant::screenWidth,Constant::screenHeight);
-    BulletFactory::loadBullet();
     state=READY;
 }
 

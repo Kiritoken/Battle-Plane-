@@ -5,6 +5,7 @@
 #include "../utilis/stb_image.h"
 #include "game_scene.h"
 #include "game_object.h"
+#include "../object/enemy_factory.h"
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -17,7 +18,7 @@ GameScene::GameScene() {
 }
 
 void GameScene::init(int width, int height) {
-    backgroundImage="../res/image/background6.bmp";
+    backgroundImage="../res/image/background3.bmp";
     this->width=width/2;
     this->height=height/2;
 
@@ -51,10 +52,26 @@ void GameScene::init(int width, int height) {
     std::cout<<"初始化战机中......"<<std::endl;
     playerPlane=new PlayerPlane(0,0,82,82,0);
     std::cout<<"战机初始化完毕"<<std::endl;
+
+    //初始化
+    BulletFactory::loadBullet();
+    EnemyFactory::loadEnemyPlane();
 }
 
 GameScene::~GameScene() {
    delete playerPlane;
+}
+
+
+void GameScene::loadLevelEnemy() {
+    static int frameCount=0;
+    if(frameCount>=59){
+        EnemyFactory::genEnemyPlanes();
+        frameCount=0;
+    } else{
+        frameCount++;
+    }
+
 }
 
 void GameScene::render() {
@@ -86,8 +103,12 @@ void GameScene::render() {
     //渲染战机
     playerPlane->render();
 
+    loadLevelEnemy();
     //渲染子弹
     GameObject::renderBullets();
+
+    //渲染敌机
+    GameObject::renderEnemies();
 }
 
 void GameScene::update_uv() {

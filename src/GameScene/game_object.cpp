@@ -7,6 +7,7 @@
 using namespace std;
 
 vector<shared_ptr<Bullet>> GameObject::bulletSet;
+vector<shared_ptr<EnemyPlane>> GameObject::enemySet;
 vector<FlyingObject*> GameObject::flyingObjectSet;
 
 
@@ -21,6 +22,20 @@ void GameObject::renderBullets() {
         //超出边界 析构
         if((*iter_bullet)->getState()==DEAD){
             iter_bullet=bulletSet.erase(iter_bullet);
+        } else{
+            iter_bullet++;
+        }
+    }
+}
+
+
+//渲染敌机
+void GameObject::renderEnemies() {
+    for(auto iter_bullet=enemySet.begin();iter_bullet!=enemySet.end(); ){
+        (*iter_bullet)->render();
+        //超出边界 析构
+        if((*iter_bullet)->getState()==DEAD){
+            iter_bullet=enemySet.erase(iter_bullet);
         } else{
             iter_bullet++;
         }

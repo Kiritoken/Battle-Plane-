@@ -29,6 +29,8 @@ public:
     void addAcceration(){ acceleration+=0.000001; }
     void decreaseAcceration(){ acceleration-=0.000001; }
 
+    void loadLevelEnemy();
+
 
     /**
      * 键盘
