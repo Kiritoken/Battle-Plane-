@@ -6,6 +6,7 @@
 #define EBATTLE_PLANE_FLYING_OBJECT_H
 
 
+
 enum FLYING_DIRECTION{
     LEFT,
     UP,
@@ -55,6 +56,9 @@ public:
     virtual void addAcceleration()=0;
     virtual void decreaseAcceleration()=0;
 
+    virtual void setDirection(FLYING_DIRECTION flying_direction)=0;
+
+    virtual void setShootingSpeedInterval(int value)=0;
     /**
      * 键盘
      * @param key
@@ -65,7 +69,7 @@ public:
     virtual void keyboard_event(int key, int action, int mods)=0;
 protected:
     //纹理贴图
-    unsigned int texture;
+    unsigned int* texture;
 
     //中心坐标
     float x;
@@ -82,7 +86,11 @@ protected:
 
     //ＨＰ　＆　Attack Power
     float HP;
-    float attackPower;
+    float attackPower=1.0f;
+
+
+    //射击间隔 间隔shootingSpeedInterval　帧发射　值越小发射速度越快
+    int shootingSpeedInterval;
 };
 
 

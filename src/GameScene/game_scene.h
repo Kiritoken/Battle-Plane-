@@ -9,6 +9,7 @@
 #include "../glm/glm.hpp"
 #include "../object/player_plane.h"
 
+
 class GameScene {
 public:
     GameScene();
@@ -65,7 +66,7 @@ private:
 
 
     //playerplane
-    FlyingObject* playerPlane;
+    PlayerPlane* playerPlane;
 };
 
 

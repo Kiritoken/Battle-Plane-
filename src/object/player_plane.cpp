@@ -9,16 +9,21 @@
 #include <cmath>
 #include "player_plane.h"
 #include "../utilis/stb_image.h"
-
+#include "bullet_factory.h"
+#include "../GameScene/game_object.h"
+//默认窗口大小
+#define DEFAULT_W 480
+#define DEFAULT_H 640
+#define PI 3.1415927
 
 PlayerPlane::PlayerPlane(float _x, float _y, float width, float height):
                         FlyingObject(_x,_y,width,height)
 {
     std::string backgroundImage="../res/image/plane23.png";
 
-    glGenTextures(1, &this->texture);
+    glGenTextures(1, this->texture);
     //绑定纹理
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, *texture);
     // 为当前绑定的纹理对象设置环绕、过滤方式
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -37,6 +42,7 @@ PlayerPlane::PlayerPlane(float _x, float _y, float width, float height):
     stbi_image_free(data);
 
     setVelocity(10);
+    setShootingSpeedInterval(2);
    //setAcceleration(1.0);
 
 }
@@ -55,28 +61,112 @@ void PlayerPlane::render() {
 
     //启用纹理
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, *texture);
     //颜色混合模式
     //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    glBegin(GL_QUADS);
-    /**
-     * UV 纹理坐标系，原点在坐上　ｘ轴向右　ｙ轴向下
-     *
-     */
-    //print();
-    //左上
-    glTexCoord2f(0.0,0.0); glVertex3f(float(x-f_width*0.5),float(y+f_height*0.5),0.0f);
-    //右上
-    glTexCoord2f(1.0,0.0); glVertex3f(float(x+f_width*0.5),float(y+f_height*0.5), 0.0f);
-    //右下
-    glTexCoord2f(1.0, 1.0); glVertex3f(float(x+f_width*0.5),float(y-f_height*0.5), 0.0f);
-    //左下
-    glTexCoord2f(0.0,1.0); glVertex3f(float(x-f_width*0.5),float(y-f_height*0.5), 0.0f);
-    glEnd();
-    glFlush();
-    glDisable(GL_TEXTURE_2D);
 
+
+   switch (direction) {
+ /*      case LEFT:
+       case LEFT_DOWN:
+       case LEFT_UP:
+        glMatrixMode(GL_TEXTURE);
+        glLoadIdentity();
+        glMatrixMode(GL_MODELVIEW);
+
+        glPushMatrix();
+        glTranslatef(0.5, 0.5, 0.0);
+        glRotatef(90, 0, 0.0, 1.0);
+        glBegin(GL_QUADS);
+
+        *//**
+        * UV 纹理坐标系，原点在坐上　ｘ轴向右　ｙ轴向下
+        *
+        *//*
+        //print();
+        //左上
+        glTexCoord2f(0.0, 0.0);
+        glVertex3f(float(x - f_width * 0.5), float(y + f_height * 0.5), 0.0f);
+        //右上
+        glTexCoord2f(1.0, 0.0);
+        glVertex3f(float(x + f_width * 0.5), float(y + f_height * 0.5), 0.0f);
+        //右下
+        glTexCoord2f(1.0, 1.0);
+        glVertex3f(float(x + f_width * 0.5), float(y - f_height * 0.5), 0.0f);
+        //左下
+        glTexCoord2f(0.0, 1.0);
+        glVertex3f(float(x - f_width * 0.5), float(y - f_height * 0.5), 0.0f);
+
+        glEnd();
+        glPopMatrix();
+
+        glFlush();
+        glDisable(GL_TEXTURE_2D);
+     break;
+
+       case RIGHT:
+       case RIGHT_DOWN:
+       case RIGHT_UP:
+           glMatrixMode(GL_TEXTURE);
+           glLoadIdentity();
+           glMatrixMode(GL_MODELVIEW);
+
+           glPushMatrix();
+           glTranslatef(0.5, 0.5, 0.0);
+           glRotatef(-90, 0, 0.0, 1.0);
+           glBegin(GL_QUADS);
+
+           *//**
+           * UV 纹理坐标系，原点在坐上　ｘ轴向右　ｙ轴向下
+           *
+           *//*
+           //print();
+           //左上
+           glTexCoord2f(0.0, 0.0);
+           glVertex3f(float(x - f_width * 0.5), float(y + f_height * 0.5), 0.0f);
+           //右上
+           glTexCoord2f(1.0, 0.0);
+           glVertex3f(float(x + f_width * 0.5), float(y + f_height * 0.5), 0.0f);
+           //右下
+           glTexCoord2f(1.0, 1.0);
+           glVertex3f(float(x + f_width * 0.5), float(y - f_height * 0.5), 0.0f);
+           //左下
+           glTexCoord2f(0.0, 1.0);
+           glVertex3f(float(x - f_width * 0.5), float(y - f_height * 0.5), 0.0f);
+
+           glEnd();
+           glPopMatrix();
+
+           glFlush();
+           glDisable(GL_TEXTURE_2D);
+       break;*/
+       default:
+           glBegin(GL_QUADS);
+
+           //print();
+           //左上
+           glTexCoord2f(0.0, 0.0);
+           glVertex3f(float(x - f_width * 0.5), float(y + f_height * 0.5), 0.0f);
+           //右上
+           glTexCoord2f(1.0, 0.0);
+           glVertex3f(float(x + f_width * 0.5), float(y + f_height * 0.5), 0.0f);
+           //右下
+           glTexCoord2f(1.0, 1.0);
+           glVertex3f(float(x + f_width * 0.5), float(y - f_height * 0.5), 0.0f);
+           //左下
+           glTexCoord2f(0.0, 1.0);
+           glVertex3f(float(x - f_width * 0.5), float(y - f_height * 0.5), 0.0f);
+
+           glEnd();
+           glFlush();
+
+           break;
+   }
+    //移动
     move();
+
+    //射击
+    shootBullet();
 }
 
 float PlayerPlane::getX() {
@@ -134,7 +224,7 @@ void PlayerPlane::keyboard_event(int key, int action, int mods) {
 
     if (action == GLFW_PRESS|| action==GLFW_REPEAT){
      //   std::cout<<"按下"<<char(key)<<std::endl;
-       if(key=='W'||key=='A'||key=='S'||key=='D')
+       if(key=='W'||key=='A'||key=='S'||key=='D'||key=='J')
         pressed[key]=true;
     }
     //松开
@@ -142,14 +232,16 @@ void PlayerPlane::keyboard_event(int key, int action, int mods) {
         pressed[key]=false;
      //   std::cout<<"松开"<<key<<std::endl;
     }
-    confirmDIrection();
+    confirmDirection();
 }
 
-void PlayerPlane::confirmDIrection() {
+void PlayerPlane::confirmDirection() {
     bool bL=pressed['A'];
     bool bR=pressed['D'];
     bool bU=pressed['W'];
     bool bD=pressed['S'];
+    //射击状态
+    shooting=pressed['J'];
 
     if(bL && !bU && !bR && !bD) direction = LEFT;
     else if(bL && bU && !bR && !bD) direction = LEFT_UP;
@@ -195,7 +287,7 @@ void PlayerPlane::move() {
             y-=distance_y;
             break;
         case LEFT_UP:
-            std::cout<<"左上"<<std::endl;
+          //  std::cout<<"左上"<<std::endl;
             distance_x=float((velocity+0.5*acceleration)*0.707106781);
             distance_y=distance_x;
             x-=distance_x;
@@ -203,7 +295,7 @@ void PlayerPlane::move() {
             velocity+=acceleration;
             break;
         case LEFT_DOWN:
-            std::cout<<"左下"<<std::endl;
+           // std::cout<<"左下"<<std::endl;
             distance_x=float((velocity+0.5*acceleration)*0.707106781);
             distance_y=distance_x;
             x-=distance_x;
@@ -211,7 +303,7 @@ void PlayerPlane::move() {
             velocity+=acceleration;
             break;
         case RIGHT_UP:
-            std::cout<<"右上"<<std::endl;
+          //  std::cout<<"右上"<<std::endl;
             distance_x=float((velocity+0.5*acceleration)*0.707106781);
             distance_y=distance_x;
             x+=distance_x;
@@ -219,7 +311,7 @@ void PlayerPlane::move() {
             velocity+=acceleration;
             break;
         case RIGHT_DOWN:
-            std::cout<<"右下"<<std::endl;
+           // std::cout<<"右下"<<std::endl;
             distance_x=float((velocity+0.5*acceleration)*0.707106781);
             distance_y=distance_x;
             x+=distance_x;
@@ -230,5 +322,31 @@ void PlayerPlane::move() {
             velocity=10;
             break;
     }
+
+    //判断是否越界
+    if(x<-240) x=-240;
+    if(x>240) x=240;
+    if(y<-320) y=-320;
+    if(y>320) y=320;
 }
 
+
+void PlayerPlane::shootBullet() {
+    static int frameCount=0;
+    //cout<<frameCount<<endl;
+    if(shooting){
+        if(shootingSpeedInterval<=frameCount) {
+            //new bullet 添加到ＧameScene中去
+            auto bullet = BulletFactory::getBullet(x, float(y + f_height * 0.5), 6);
+            if (bullet) {
+                bullet->setDirection(UP);
+                GameObject::bulletSet.push_back(bullet);
+            }
+            frameCount=0;
+        }
+    }
+    frameCount++;
+    if(frameCount==60){
+        frameCount=0;
+    }
+}

@@ -3,6 +3,8 @@
 //
 #include <iostream>
 #include "viewer.h"
+#include "../object/bullet_factory.h"
+
 using namespace std;
 //默认窗口大小
 #define DEFAULT_W 480
@@ -96,6 +98,7 @@ void Viewer::init() {
     resize_callback(window, (int)buffer_w, (int)buffer_h);
 
     gameScene->init(DEFAULT_W,DEFAULT_H);
+    BulletFactory::loadBullet();
     state=READY;
 }
 

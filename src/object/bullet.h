@@ -2,27 +2,25 @@
 // Created by eli on 1/9/19.
 //
 
-#ifndef EBATTLE_PLANE_PLAYER_PLANE_H
-#define EBATTLE_PLANE_PLAYER_PLANE_H
+#ifndef EBATTLE_PLANE_BULLET_H
+#define EBATTLE_PLANE_BULLET_H
+
 
 #include "flying_object.h"
-#include <vector>
 
-
-//玩家战机
-class PlayerPlane :public FlyingObject{
+class Bullet : public FlyingObject{
 public:
     //构造函数
-    PlayerPlane(float _x,float _y,float width,float height);
-    ~PlayerPlane(){}
+    Bullet(float _x,float _y,float width,float height,unsigned int* _texture);
 
+    ~Bullet();
     //移动
     void move(float _x,float _y) override;
 
     void move();
 
     //TODO 射击
-    void shootBullet();
+
     //TODO 碰撞检测
     bool detectCollision(FlyingObject *flyingObject) override;
 
@@ -39,7 +37,7 @@ public:
     void  setAcceleration(float value)override;
 
     float getHp()override;
-    void setHp(float value)override;
+    void  setHp(float value)override;
 
     float getAttackPower()override;
     void  setAttackPower(float value)override;
@@ -51,17 +49,13 @@ public:
     void decreaseAcceleration()override;
 
     void keyboard_event(int key, int action, int mods) override;
+    void setDirection(FLYING_DIRECTION flying_direction) override {direction=flying_direction; }
 
-    void setDirection(FLYING_DIRECTION flying_direction){direction=flying_direction; }
+    void setShootingSpeedInterval(int value) override{shootingSpeedInterval=value; }
 
-    void setShootingSpeedInterval(int value) override{shootingSpeedInterval=value;}
+    bool frinedly;
 
- //   void setGameScene(GameScene* game){gameScene=game; }
-private:
-    bool pressed[349]={0};
-    bool shooting= false;
-    void confirmDirection();
 };
 
 
-#endif //EBATTLE_PLANE_PLAYER_PLANE_H
+#endif //EBATTLE_PLANE_BULLET_H

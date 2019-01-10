@@ -4,9 +4,13 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../utilis/stb_image.h"
 #include "game_scene.h"
+#include "game_object.h"
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+
+
 
 GameScene::GameScene() {
 
@@ -56,6 +60,7 @@ GameScene::~GameScene() {
 void GameScene::render() {
     //启用纹理
     glEnable(GL_TEXTURE_2D);
+    //绑定纹理
     glBindTexture(GL_TEXTURE_2D, texture);
     //颜色混合模式
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
@@ -78,7 +83,13 @@ void GameScene::render() {
     glDisable(GL_TEXTURE_2D);
     update_uv();
 
+    //渲染战机
     playerPlane->render();
+
+    //渲染子弹
+    for(auto bullet:GameObject::bulletSet){
+        bullet->render();
+    }
 }
 
 void GameScene::update_uv() {

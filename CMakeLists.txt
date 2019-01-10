@@ -38,4 +38,4 @@ LINK_LIBRARIES(dl)
 LINK_LIBRARIES(GLEW)
 LINK_LIBRARIES(GL)
 
-add_executable(EBattle_Plane src/main.cpp src/viewer/viewer.cpp src/viewer/viewer.h src/GameScene/game_scene.cpp src/GameScene/game_scene.h src/object/flying_object.cpp src/object/flying_object.h src/object/player_plane.cpp src/object/player_plane.h)
+add_executable(EBattle_Plane src/main.cpp src/viewer/viewer.cpp src/viewer/viewer.h src/GameScene/game_scene.cpp src/GameScene/game_scene.h src/object/flying_object.cpp src/object/flying_object.h src/object/player_plane.cpp src/object/player_plane.h src/object/bullet.cpp src/object/bullet.h src/object/bullet_factory.cpp src/object/bullet_factory.h src/GameScene/game_object.cpp src/GameScene/game_object.h src/utilis/timer.h)
