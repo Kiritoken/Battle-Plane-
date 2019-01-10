@@ -81,8 +81,8 @@ void EnemyFactory::genEnemyPlanes() {
 
     default_random_engine e(time(NULL));
     uniform_int_distribution<int> u_num(0, 4); //随机数分布对象
-    uniform_real_distribution<float> u_velocity(1, 5);
-    uniform_real_distribution<float> u_acceleration(0, 0.1);
+    uniform_real_distribution<float> u_velocity(1, 2);
+    uniform_real_distribution<float> u_acceleration(0, 0.05);
     uniform_int_distribution<int> u_textureIndex(0, texID.size()-2);
     //随机数量
     int num=u_num(e);

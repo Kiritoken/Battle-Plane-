@@ -105,7 +105,20 @@ void Viewer::init() {
 
 void Viewer::start() {
     while( !glfwWindowShouldClose( window ) ) {
+
         update();
+
+        //FPS
+        sys_cur=system_clock::now();
+        double elapsed=((duration<double>) (sys_cur - sys_last)).count();
+        if(elapsed>=1.0f){
+            fps=int(frameCount/elapsed);
+            cout<<"FPS: "<<fps<<endl;
+            frameCount=0;
+            sys_last=sys_cur;
+        } else{
+            frameCount++;
+        }
     }
 }
 

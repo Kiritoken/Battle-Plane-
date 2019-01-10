@@ -8,7 +8,11 @@
 #include <string>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
+#include <chrono>
 #include "../GameScene/game_scene.h"
+using namespace std;
+using namespace chrono;
 
 enum GameState{
     READY,
@@ -39,6 +43,12 @@ private:
     //标题
     std::string _title;
 
+
+    int fps=0;
+    int frameCount=0;
+    time_point<system_clock> sys_last;
+    time_point<system_clock> sys_cur;
+
     //窗口属性
     static GLFWwindow* window;
     static size_t buffer_w;
@@ -47,6 +57,9 @@ private:
 
     static GameState state;
     static GameScene* gameScene;
+
+
+
     /**
     * 循环
     */

@@ -59,9 +59,11 @@ public:
     void updateBBox() override;
 
 private:
-    bool pressed[349]={0};
     bool shooting= false;
     void confirmDirection();
+
+
+    char a[1024000];
 
 };
 
