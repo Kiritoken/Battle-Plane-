@@ -56,7 +56,10 @@ public:
 
     void setShootingSpeedInterval(int value) override{shootingSpeedInterval=value;}
 
- //   void setGameScene(GameScene* game){gameScene=game; }
+    STATE getState() override{ return state; }
+    void  setState(STATE _state) override{ state=_state; }
+    void updateBBox() override;
+
 private:
     bool pressed[349]={0};
     bool shooting= false;

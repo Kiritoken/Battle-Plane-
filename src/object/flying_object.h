@@ -6,7 +6,9 @@
 #define EBATTLE_PLANE_FLYING_OBJECT_H
 
 
+#include "../glm/vec2.hpp"
 
+//飞行方向枚举
 enum FLYING_DIRECTION{
     LEFT,
     UP,
@@ -19,13 +21,30 @@ enum FLYING_DIRECTION{
     STOP
 };
 
+//状态枚举
+enum STATE{
+    ALIVE,   //存活　
+    EXPLOED, //爆炸
+    DEAD     //出边界
+};
 
 class FlyingObject{
 public:
-    FlyingObject (float _x,float _y,float width,float height):x(_x),y(_y),
-                                                f_width(width),f_height(height){}
+    FlyingObject (float _x,float _y,float width,float height)
+    :x(_x),y(_y),f_width(width),f_height(height){
+
+        texture=new unsigned int;
+        //包围盒
+        left_up=glm::vec2(float(x-f_width*0.5),float(y+f_height*0.5));
+        left_down=glm::vec2(float(x-f_width*0.5),float(y-f_height*0.5));
+        right_up=glm::vec2(float(x+f_width*0.5),float(y+f_height*0.5));
+        right_down=glm::vec2(float(x+f_width*0.5),float(y-f_height*0.5));
+    }
+
+   ~FlyingObject(){ delete texture;}
     //移动
     virtual void move(float _x,float _y) =0;
+    virtual void updateBBox()=0;
 
     //TODO 射击
 
@@ -59,6 +78,10 @@ public:
     virtual void setDirection(FLYING_DIRECTION flying_direction)=0;
 
     virtual void setShootingSpeedInterval(int value)=0;
+
+    virtual STATE getState()=0;
+    virtual void  setState(STATE _state)=0;
+
     /**
      * 键盘
      * @param key
@@ -74,6 +97,12 @@ protected:
     //中心坐标
     float x;
     float y;
+
+    //近似包围盒
+    glm::vec2 left_up;
+    glm::vec2 left_down;
+    glm::vec2 right_up;
+    glm::vec2 right_down;
 
     //飞行物大小
     float f_width;
@@ -91,6 +120,9 @@ protected:
 
     //射击间隔 间隔shootingSpeedInterval　帧发射　值越小发射速度越快
     int shootingSpeedInterval;
+
+    STATE state=ALIVE;
+
 };
 
 

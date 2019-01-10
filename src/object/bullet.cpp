@@ -3,6 +3,7 @@
 //
 
 #include "bullet.h"
+#include "../utilis/constant.h"
 #include <iostream>
 #include <GL/glew.h>
 
@@ -12,12 +13,12 @@ Bullet::Bullet(float _x, float _y, float width, float height,unsigned int *_text
 {
     //纹理
     this->texture=_texture;
-
-
-
+    updateBBox();
 }
 
-Bullet::~Bullet() {}
+Bullet::~Bullet() {
+    std::cout<<"被析构"<<std::endl;
+}
 
 
 void Bullet::move(float _x, float _y) {
@@ -31,6 +32,15 @@ bool Bullet::detectCollision(FlyingObject *flyingObject) {
 }
 
 void Bullet::render() {
+
+    //判断是否出界面
+    if(!(Constant::screenHeight*0.5>right_down.y && -Constant::screenHeight*0.5<left_up.y&&
+       -Constant::screenWidth*0.5<right_down.x && Constant::screenWidth>left_up.x))
+   {
+       setState(DEAD);
+       return;
+   }
+
     //启用纹理
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, *texture);
@@ -39,27 +49,22 @@ void Bullet::render() {
 
 
     switch (direction) {
-
         default:
             glBegin(GL_QUADS);
-
-            //print();
             //左上
             glTexCoord2f(0.0, 0.0);
-            glVertex3f(float(x - f_width * 0.5), float(y + f_height * 0.5), 0.0f);
+            glVertex3f(left_up.x,left_up.y ,0.0f);
             //右上
             glTexCoord2f(1.0, 0.0);
-            glVertex3f(float(x + f_width * 0.5), float(y + f_height * 0.5), 0.0f);
+            glVertex3f(right_up.x,right_up.y ,0.0f);
             //右下
             glTexCoord2f(1.0, 1.0);
-            glVertex3f(float(x + f_width * 0.5), float(y - f_height * 0.5), 0.0f);
+            glVertex3f(right_down.x,right_down.y, 0.0f);
             //左下
             glTexCoord2f(0.0, 1.0);
-            glVertex3f(float(x - f_width * 0.5), float(y - f_height * 0.5), 0.0f);
-
+            glVertex3f(left_down.x,left_down.y,0.0f);
             glEnd();
             glFlush();
-
             break;
     }
     move();
@@ -187,11 +192,15 @@ void Bullet::move() {
             velocity=10;
             break;
     }
-
-    //判断是否越界
-/*    if(x<-240) x=-240;
-    if(x>240) x=240;
-    if(y<-320) y=-320;
-    if(y>320) y=320;*/
+    //更新包围盒
+    updateBBox();
 }
 
+
+
+void Bullet::updateBBox() {
+    left_up=glm::vec2(float(x-f_width*0.5),float(y+f_height*0.5));
+    left_down=glm::vec2(float(x-f_width*0.5),float(y-f_height*0.5));
+    right_up=glm::vec2(float(x+f_width*0.5),float(y+f_height*0.5));
+    right_down=glm::vec2(float(x+f_width*0.5),float(y-f_height*0.5));
+}

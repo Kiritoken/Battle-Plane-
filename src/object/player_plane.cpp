@@ -63,8 +63,7 @@ void PlayerPlane::render() {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, *texture);
     //颜色混合模式
-    //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
    switch (direction) {
  /*      case LEFT:
@@ -146,16 +145,16 @@ void PlayerPlane::render() {
            //print();
            //左上
            glTexCoord2f(0.0, 0.0);
-           glVertex3f(float(x - f_width * 0.5), float(y + f_height * 0.5), 0.0f);
+           glVertex3f(left_up.x,left_up.y ,0.0f);
            //右上
            glTexCoord2f(1.0, 0.0);
-           glVertex3f(float(x + f_width * 0.5), float(y + f_height * 0.5), 0.0f);
+           glVertex3f(right_up.x,right_up.y ,0.0f);
            //右下
            glTexCoord2f(1.0, 1.0);
-           glVertex3f(float(x + f_width * 0.5), float(y - f_height * 0.5), 0.0f);
+           glVertex3f(right_down.x,right_down.y, 0.0f);
            //左下
            glTexCoord2f(0.0, 1.0);
-           glVertex3f(float(x - f_width * 0.5), float(y - f_height * 0.5), 0.0f);
+           glVertex3f(left_down.x,left_down.y,0.0f);
 
            glEnd();
            glFlush();
@@ -328,6 +327,7 @@ void PlayerPlane::move() {
     if(x>240) x=240;
     if(y<-320) y=-320;
     if(y>320) y=320;
+    updateBBox();
 }
 
 
@@ -349,4 +349,13 @@ void PlayerPlane::shootBullet() {
     if(frameCount==60){
         frameCount=0;
     }
+}
+
+
+
+void PlayerPlane::updateBBox() {
+    left_up=glm::vec2(float(x-f_width*0.5),float(y+f_height*0.5));
+    left_down=glm::vec2(float(x-f_width*0.5),float(y-f_height*0.5));
+    right_up=glm::vec2(float(x+f_width*0.5),float(y+f_height*0.5));
+    right_down=glm::vec2(float(x+f_width*0.5),float(y-f_height*0.5));
 }

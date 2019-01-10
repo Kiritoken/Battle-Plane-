@@ -14,6 +14,7 @@ class GameObject {
 public:
     static vector<Bullet*> bulletSet;
     static vector<FlyingObject*> flyingObjectSet;
+    static void renderBullets();
 };
 
 

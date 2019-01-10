@@ -7,6 +7,7 @@
 
 
 #include "flying_object.h"
+#include "../glm/vec2.hpp"
 
 class Bullet : public FlyingObject{
 public:
@@ -53,8 +54,11 @@ public:
 
     void setShootingSpeedInterval(int value) override{shootingSpeedInterval=value; }
 
-    bool frinedly;
+    STATE getState() override{ return state; }
+    void  setState(STATE _state) override{ state=_state; }
+    void updateBBox() override;
 
+    //bool frinedly;
 };
 
 

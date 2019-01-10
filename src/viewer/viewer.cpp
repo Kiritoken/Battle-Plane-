@@ -4,6 +4,7 @@
 #include <iostream>
 #include "viewer.h"
 #include "../object/bullet_factory.h"
+#include "../utilis/constant.h"
 
 using namespace std;
 //默认窗口大小
@@ -42,7 +43,7 @@ void Viewer::init() {
     //窗口大小不可resize
     glfwWindowHint(GLFW_RESIZABLE , GL_FALSE );
     //创建窗口
-    window = glfwCreateWindow( DEFAULT_W, DEFAULT_H, _title.c_str(), nullptr, nullptr);
+    window = glfwCreateWindow( Constant::screenWidth, Constant::screenHeight, _title.c_str(), nullptr, nullptr);
     if (!window) {
         cerr<<"窗口初始化失败"<<endl;
         glfwTerminate();
@@ -84,7 +85,7 @@ void Viewer::init() {
     glViewport( 0 ,0 , DEFAULT_W , DEFAULT_H );
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-DEFAULT_W/2,DEFAULT_W/2,-DEFAULT_H/2,DEFAULT_H/2);
+    gluOrtho2D(-Constant::screenWidth/2,Constant::screenWidth/2,-Constant::screenHeight/2,Constant::screenHeight/2);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -92,12 +93,13 @@ void Viewer::init() {
     // resize components to current window size, get DPI
     glfwGetFramebufferSize(window, (int*) &buffer_w, (int*) &buffer_h );
 
-    //TODO　初始化GameScene
+
 
     // resize elements to current size
     resize_callback(window, (int)buffer_w, (int)buffer_h);
 
-    gameScene->init(DEFAULT_W,DEFAULT_H);
+    //TODO　初始化GameScene
+    gameScene->init(Constant::screenWidth,Constant::screenHeight);
     BulletFactory::loadBullet();
     state=READY;
 }

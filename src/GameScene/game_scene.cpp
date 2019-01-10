@@ -87,9 +87,7 @@ void GameScene::render() {
     playerPlane->render();
 
     //渲染子弹
-    for(auto bullet:GameObject::bulletSet){
-        bullet->render();
-    }
+    GameObject::renderBullets();
 }
 
 void GameScene::update_uv() {
@@ -105,11 +103,6 @@ void GameScene::update_uv() {
 
 
 void GameScene::reset_uv() {
-/*    left_up=glm::vec2(0.0,0.0);
-    right_up=glm::vec2(float(width)/1000,0.0);
-    right_down=glm::vec2(float(width)/1000,float(height)/1000);
-    left_down=glm::vec2(0.0,float(height)/1000);*/
-
     left_up=glm::vec2(0.0,0.0);
     right_up=glm::vec2(1.0,0.0);
     right_down=glm::vec2(1.0,float(height)/1000);
