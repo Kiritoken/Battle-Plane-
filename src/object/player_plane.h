@@ -13,7 +13,7 @@
 class PlayerPlane :public FlyingObject{
 public:
     //构造函数
-    PlayerPlane(float _x,float _y,float width,float height);
+    PlayerPlane(float _x,float _y,float width,float height,unsigned int _texture_index);
      ~PlayerPlane();
 
     //移动
@@ -64,6 +64,8 @@ private:
     bool pressed[349]={0};
     bool shooting= false;
     void confirmDirection();
+
+    unsigned int* texture;
 };
 
 

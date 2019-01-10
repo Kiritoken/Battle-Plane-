@@ -16,11 +16,12 @@
 #define DEFAULT_H 640
 #define PI 3.1415927
 
-PlayerPlane::PlayerPlane(float _x, float _y, float width, float height):
-                        FlyingObject(_x,_y,width,height)
+PlayerPlane::PlayerPlane(float _x, float _y, float width, float height,unsigned int _texture_index):
+                        FlyingObject(_x,_y,width,height,_texture_index)
 {
     std::string backgroundImage="../res/image/plane28.png";
 
+    this->texture=new unsigned int();
     glGenTextures(1, this->texture);
     //绑定纹理
     glBindTexture(GL_TEXTURE_2D, *texture);
@@ -227,7 +228,7 @@ void PlayerPlane::keyboard_event(int key, int action, int mods) {
 
     if (action == GLFW_PRESS|| action==GLFW_REPEAT){
      //   std::cout<<"按下"<<char(key)<<std::endl;
-       if(key=='W'||key=='A'||key=='S'||key=='D'||key=='J')
+       if(key=='W'||key=='A'||key=='S'||key=='D'||key=='J'||key==GLFW_KEY_UP||key==GLFW_KEY_DOWN)
         pressed[key]=true;
     }
     //松开
@@ -341,7 +342,7 @@ void PlayerPlane::shootBullet() {
     if(shooting){
         if(shootingSpeedInterval<=frameCount) {
             //new bullet 添加到ＧameScene中去
-            auto bullet = BulletFactory::getBullet(x, float(y + f_height * 0.5), 11);
+            auto bullet = BulletFactory::getBullet(x, float(y + f_height * 0.5), 10);
             if (bullet) {
                 bullet->setDirection(UP);
                 GameObject::bulletSet.push_back(bullet);

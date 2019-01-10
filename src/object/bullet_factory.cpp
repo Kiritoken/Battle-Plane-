@@ -6,20 +6,22 @@
 #include <iostream>
 #include "bullet_factory.h"
 #include "../utilis/stb_image.h"
+#include "../object/bullet.h"
 
 vector<BulletInfo> BulletFactory::bulletArray;
-GLuint  BulletFactory::texID[100];
+vector<GLuint>  BulletFactory::texID;
 
 //TODO 读取json数据
 void BulletFactory::loadBullet() {
     std::string bulletImage="../res/image/m";
-    unsigned int level=1;
+    unsigned int level=0;
     while(true) {
         BulletInfo bulletInfo;
-        bulletInfo._texture=texID+level-1;
-        glGenTextures(1, bulletInfo._texture);
+        bulletInfo.texture_index=level;
+        texID.push_back(bulletInfo.texture_index);
+        glGenTextures(1, &texID[bulletInfo.texture_index]);
         //绑定纹理
-        glBindTexture(GL_TEXTURE_2D, *bulletInfo._texture);
+        glBindTexture(GL_TEXTURE_2D, texID[bulletInfo.texture_index]);
         // 为当前绑定的纹理对象设置环绕、过滤方式
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -39,6 +41,7 @@ void BulletFactory::loadBullet() {
             break;
         }
         stbi_image_free(data);
+
         bulletInfo.attackPower=50.0f;
         bulletInfo.texturePath=fileName;
         bulletInfo.b_width=10;
@@ -57,7 +60,7 @@ shared_ptr<Bullet> BulletFactory::getBullet(float _x, float _y,unsigned int leve
     if(level>bulletArray.size())
         return nullptr;
     else {
-        shared_ptr<Bullet> bullet(new Bullet(_x, _y,bulletArray[level].b_width,bulletArray[level].b_height,bulletArray[level]._texture));
+        shared_ptr<Bullet> bullet(new Bullet(_x, _y,bulletArray[level].b_width,bulletArray[level].b_height,bulletArray[level].texture_index));
         //TODO json 数据　加速度　速度
         bullet->setVelocity(15.0f);
         bullet->setAcceleration(0.0f);

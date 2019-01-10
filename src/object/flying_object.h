@@ -30,10 +30,9 @@ enum STATE{
 
 class FlyingObject{
 public:
-    FlyingObject (float _x,float _y,float width,float height)
-    :x(_x),y(_y),f_width(width),f_height(height){
+    FlyingObject (float _x,float _y,float width,float height, unsigned int _texture_index)
+    :x(_x),y(_y),f_width(width),f_height(height),texture_index(_texture_index){
 
-        texture=new unsigned int;
         //包围盒
         left_up=glm::vec2(float(x-f_width*0.5),float(y+f_height*0.5));
         left_down=glm::vec2(float(x-f_width*0.5),float(y-f_height*0.5));
@@ -91,8 +90,8 @@ public:
      */
     virtual void keyboard_event(int key, int action, int mods)=0;
 protected:
-    //纹理贴图
-    unsigned int* texture;
+    //纹理贴图索引 GameObject::texID
+    unsigned int texture_index;
 
     //中心坐标
     float x;

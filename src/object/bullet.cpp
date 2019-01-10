@@ -4,20 +4,21 @@
 
 #include "bullet.h"
 #include "../utilis/constant.h"
+#include "bullet_factory.h"
 #include <iostream>
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 
-Bullet::Bullet(float _x, float _y, float width, float height,unsigned int *_texture)
-                                                       :FlyingObject(_x,_y,width,height)
+Bullet::Bullet(float _x, float _y, float width, float height,unsigned int _texture_index)
+                                                       :FlyingObject(_x,_y,width,height,_texture_index)
 {
-    //纹理
-    this->texture=_texture;
     updateBBox();
 }
 
 Bullet::~Bullet() {
-    std::cout<<"被析构"<<std::endl;
+    //delete texture;
+   // std::cout<<"被析构"<<std::endl;
 }
 
 
@@ -43,7 +44,7 @@ void Bullet::render() {
 
     //启用纹理
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, *texture);
+    glBindTexture(GL_TEXTURE_2D, BulletFactory::texID[texture_index]);
     //颜色混合模式
     //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
@@ -120,9 +121,8 @@ void Bullet::decreaseAcceleration() {}
 
 
 
-//TODO 添加斜方向
+//TODO 子弹测试
 void Bullet::keyboard_event(int key, int action, int mods) {
-
 }
 
 

@@ -49,7 +49,7 @@ void GameScene::init(int width, int height) {
     stbi_image_free(data);
 
     std::cout<<"初始化战机中......"<<std::endl;
-    playerPlane=new PlayerPlane(0,0,82,82);
+    playerPlane=new PlayerPlane(0,0,82,82,0);
     std::cout<<"战机初始化完毕"<<std::endl;
 }
 

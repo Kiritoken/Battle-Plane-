@@ -8,11 +8,12 @@
 
 #include "flying_object.h"
 #include "../glm/vec2.hpp"
+#include "bullet_factory.h"
 
 class Bullet : public FlyingObject{
 public:
     //构造函数
-    Bullet(float _x,float _y,float width,float height,unsigned int* _texture);
+    Bullet(float _x,float _y,float width,float height,unsigned int _texture_index);
 
     ~Bullet() override;
     //移动
