@@ -22,7 +22,7 @@ PlayerPlane::PlayerPlane(float _x, float _y, float width, float height,unsigned 
     //类型
     objectType=PLAER_PLANE;
 
-    std::string backgroundImage="../res/image/plane23.png";
+    std::string backgroundImage="../res/image/plane4.png";
     this->texture=new unsigned int();
     glGenTextures(1, this->texture);
     //绑定纹理
@@ -306,7 +306,7 @@ void PlayerPlane::shootBullet() {
     if(shooting){
         if(shootingSpeedInterval<=frameCount) {
             //new bullet 添加到ＧameScene中去
-            auto bullet = BulletFactory::getBullet(x, float(y + f_height * 0.5), 12);
+            auto bullet = BulletFactory::getBullet(x, float(y + f_height * 0.5), 2);
             if (bullet) {
                 bullet->setDirection(UP);
                 //物体类型　玩家子弹
@@ -336,7 +336,7 @@ bool PlayerPlane::traverse2DetectCollision() {
     for(auto &shared_ptr_object:GameObject::flyingObjectSet){
         auto type=shared_ptr_object->getObjectType();
         //跳过自己 和自己的子弹
-        if(shared_ptr_object.get()==this || type==PLAYER_BULLET || type==this->getObjectType()){
+        if(shared_ptr_object.get()==this || type==PLAYER_BULLET || type==this->getObjectType() || type==EXPLOSION){
             continue;
         }
 

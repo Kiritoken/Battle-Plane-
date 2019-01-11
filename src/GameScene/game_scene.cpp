@@ -7,6 +7,7 @@
 #include "game_object.h"
 #include "../object/enemy_factory.h"
 #include "../viewer/viewer.h"
+#include "../object/explosion_factory.h"
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -51,8 +52,9 @@ void GameScene::init(int width, int height) {
     stbi_image_free(data);
 
     std::cout<<"初始化战机中......"<<std::endl;
-    playerPlane=make_shared<PlayerPlane>(0,0,82,82,23);
+    playerPlane=make_shared<PlayerPlane>(0,0,82,82,0);
     playerPlane->setHp(100);
+    playerPlane->setAttackPower(5.0f);
     /**
      * 注意push完后 playerPlane的use_count=2
      * flyingObjects erase playerPlane后 use_count=1 只有当this->~() 后才会delete
@@ -64,6 +66,7 @@ void GameScene::init(int width, int height) {
     //初始化
     BulletFactory::loadBullet();
     EnemyFactory::loadEnemyPlane();
+    ExplosionFactory::loadExplosion();
 }
 
 GameScene::~GameScene() {
@@ -187,6 +190,11 @@ void GameScene::keyboard_event(int key, int action, int mods) {
             addAcceration();
         }else if(key==GLFW_KEY_END){
             decreaseAcceration();
+        }
+        if(key==GLFW_KEY_SPACE &&playerPlane.use_count()==1){
+            playerPlane->setState(ALIVE);
+            GameObject::flyingObjectSet.push_back(playerPlane);
+            Viewer::setViewerState(PLAYING);
         }
     }
     playerPlane->keyboard_event(key,action,mods);

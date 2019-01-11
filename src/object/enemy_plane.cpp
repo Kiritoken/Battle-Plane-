@@ -8,7 +8,8 @@
 #include "../utilis/constant.h"
 #include "enemy_factory.h"
 #include "../GameScene/game_object.h"
-
+#include "explosion_factory.h"
+#include "explosion.h"
 
 EnemyPlane::EnemyPlane(float _x, float _y, float width, float height,unsigned int _texture_index)
         :FlyingObject(_x,_y,width,height,_texture_index)
@@ -61,6 +62,11 @@ void EnemyPlane::render() {
 
     if(HP<=0.0f){
         //TODO new爆炸
+        auto explosion=ExplosionFactory::getExplosion(this->x,this->y,
+                this->f_width,this->f_height,this->velocity,this->acceleration,this->direction);
+        if(explosion){
+           GameObject::flyingObjectSet.push_back(explosion);
+        }
         setState(DEAD);
         return;
     }

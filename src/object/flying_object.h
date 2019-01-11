@@ -27,7 +27,8 @@ enum OBJECT_TYPE{
     PLAER_PLANE,
     PLAYER_BULLET,
     ENEMY_PLANE,
-    ENEMY_BULLET
+    ENEMY_BULLET,
+    EXPLOSION
 };
 
 //状态枚举
@@ -130,7 +131,7 @@ protected:
     float acceleration=0;
 
     //ＨＰ　＆　Attack Power
-    float HP=10;
+    float HP=5;
     float attackPower=1.0f;
 
 

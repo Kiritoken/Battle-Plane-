@@ -238,7 +238,7 @@ bool Bullet::traverse2DetectCollision() {
     for(auto &shared_ptr_object:GameObject::flyingObjectSet){
         auto type=shared_ptr_object->getObjectType();
         //跳过自己 和PLAYER_PLANE ENEMY_BULLET
-        if(shared_ptr_object.get()==this || type==this->getObjectType()||type==PLAER_PLANE ||type==ENEMY_BULLET){
+        if(shared_ptr_object.get()==this || type==this->getObjectType()||type==PLAER_PLANE ||type==ENEMY_BULLET ||type==EXPLOSION){
             continue;
         }
 

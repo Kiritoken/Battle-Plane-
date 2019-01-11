@@ -50,8 +50,10 @@ void BulletFactory::loadBullet() {
 
         bulletInfo.attackPower=50.0f;
         bulletInfo.texturePath=fileName;
-        bulletInfo.b_width=10;
-        bulletInfo.b_height=20;
+        bulletInfo.b_width=20;
+        bulletInfo.b_height=80;
+/*        bulletInfo.b_width=10;
+        bulletInfo.b_height=20;*/
 
         bulletArray.push_back(bulletInfo);
 
@@ -92,6 +94,7 @@ void BulletFactory::loadBullet() {
         bulletInfo.texturePath=fileName;
         bulletInfo.b_width=10;
         bulletInfo.b_height=20;
+
 
         enemyBulletArray.push_back(bulletInfo);
 
