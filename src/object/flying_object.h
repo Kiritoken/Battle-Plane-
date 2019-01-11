@@ -21,6 +21,15 @@ enum FLYING_DIRECTION{
     STOP
 };
 
+
+//飞行物种类
+enum OBJECT_TYPE{
+    PLAER_PLANE,
+    PLAYER_BULLET,
+    ENEMY_PLANE,
+    ENEMY_BULLET
+};
+
 //状态枚举
 enum STATE{
     ALIVE,   //存活　
@@ -49,6 +58,7 @@ public:
 
     //TODO 碰撞检测
     virtual bool detectCollision(FlyingObject *flyingObject)=0;
+    virtual bool traverse2DetectCollision()=0;
 
     //绘制
     virtual void render()=0;
@@ -81,6 +91,10 @@ public:
     virtual STATE getState()=0;
     virtual void  setState(STATE _state)=0;
 
+
+
+    OBJECT_TYPE getObjectType(){return objectType;}
+    void setObjectType(OBJECT_TYPE type){ objectType=type; }
     /**
      * 键盘
      * @param key
@@ -89,6 +103,13 @@ public:
      * @param mods    GLFW_MOD_SHIFT 按下Shift键 GLFW_MOD_CONTROL 按下Ctrl键
      */
     virtual void keyboard_event(int key, int action, int mods)=0;
+
+
+    //近似包围盒
+    glm::vec2 left_up;
+    glm::vec2 left_down;
+    glm::vec2 right_up;
+    glm::vec2 right_down;
 protected:
     //纹理贴图索引 GameObject::texID
     unsigned int texture_index;
@@ -97,11 +118,6 @@ protected:
     float x;
     float y;
 
-    //近似包围盒
-    glm::vec2 left_up;
-    glm::vec2 left_down;
-    glm::vec2 right_up;
-    glm::vec2 right_down;
 
     //飞行物大小
     float f_width;
@@ -121,7 +137,7 @@ protected:
     int shootingSpeedInterval;
 
     STATE state=ALIVE;
-
+    OBJECT_TYPE objectType=PLAER_PLANE;
 };
 
 

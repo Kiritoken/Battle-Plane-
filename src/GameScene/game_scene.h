@@ -6,6 +6,7 @@
 #define EBATTLE_PLANE_GAME_SCENE_H
 #include <string>
 #include <vector>
+#include <memory>
 #include "../glm/glm.hpp"
 #include "../object/player_plane.h"
 
@@ -68,7 +69,7 @@ private:
 
 
     //playerplane
-    PlayerPlane* playerPlane;
+    std::shared_ptr<PlayerPlane> playerPlane;
 };
 
 

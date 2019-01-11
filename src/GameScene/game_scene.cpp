@@ -50,7 +50,13 @@ void GameScene::init(int width, int height) {
     stbi_image_free(data);
 
     std::cout<<"初始化战机中......"<<std::endl;
-    playerPlane=new PlayerPlane(0,0,82,82,0);
+    playerPlane=make_shared<PlayerPlane>(0,0,82,82,0);
+    /**
+     * 注意push完后 playerPlane的use_count=2
+     * flyingObjects erase 后 use_count=1 只有当this->~() 后才会delete
+     * 所以erase后仍然可以控制 playerPLane
+     */
+    GameObject::flyingObjectSet.push_back(playerPlane);
     std::cout<<"战机初始化完毕"<<std::endl;
 
     //初始化
@@ -59,13 +65,12 @@ void GameScene::init(int width, int height) {
 }
 
 GameScene::~GameScene() {
-   delete playerPlane;
 }
 
 
 void GameScene::loadLevelEnemy() {
     static int frameCount=0;
-    if(frameCount>=59){
+    if(frameCount>=300){
         EnemyFactory::genEnemyPlanes();
         frameCount=0;
     } else{
@@ -100,15 +105,11 @@ void GameScene::render() {
     glDisable(GL_TEXTURE_2D);
     update_uv();
 
-    //渲染战机
-    playerPlane->render();
 
+
+    GameObject::renderFlyingObjects();
     loadLevelEnemy();
-    //渲染子弹
-    GameObject::renderBullets();
 
-    //渲染敌机
-    GameObject::renderEnemies();
 }
 
 void GameScene::update_uv() {

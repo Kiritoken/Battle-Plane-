@@ -29,7 +29,6 @@ void Bullet::move(float _x, float _y) {
 
 //TODO 碰撞检测
 bool Bullet::detectCollision(FlyingObject *flyingObject) {
-    return true;
 }
 
 void Bullet::render() {
@@ -203,4 +202,9 @@ void Bullet::updateBBox() {
     left_down=glm::vec2(float(x-f_width*0.5),float(y-f_height*0.5));
     right_up=glm::vec2(float(x+f_width*0.5),float(y+f_height*0.5));
     right_down=glm::vec2(float(x+f_width*0.5),float(y-f_height*0.5));
+}
+
+
+bool Bullet::traverse2DetectCollision() {
+
 }

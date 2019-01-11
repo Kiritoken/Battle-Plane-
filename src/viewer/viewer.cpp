@@ -113,7 +113,7 @@ void Viewer::start() {
         double elapsed=((duration<double>) (sys_cur - sys_last)).count();
         if(elapsed>=1.0f){
             fps=int(frameCount/elapsed);
-            cout<<"FPS: "<<fps<<endl;
+         //   cout<<"FPS: "<<fps<<endl;
             frameCount=0;
             sys_last=sys_cur;
         } else{

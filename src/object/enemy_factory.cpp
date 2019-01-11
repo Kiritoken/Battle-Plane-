@@ -80,7 +80,7 @@ void EnemyFactory::genEnemyPlanes() {
     //TODO 读取关卡json数据
 
     default_random_engine e(time(NULL));
-    uniform_int_distribution<int> u_num(0, 4); //随机数分布对象
+    uniform_int_distribution<int> u_num(0, 3); //随机数分布对象
     uniform_real_distribution<float> u_velocity(1, 2);
     uniform_real_distribution<float> u_acceleration(0, 0.05);
     uniform_int_distribution<int> u_textureIndex(0, texID.size()-2);
@@ -104,8 +104,7 @@ void EnemyFactory::genEnemyPlanes() {
         enemyPlane->setVelocity(velocity);
         enemyPlane->setAcceleration(acceleration);
         enemyPlane->setDirection(DOWN);
-        GameObject::enemySet.push_back(enemyPlane);
-
+        GameObject::flyingObjectSet.push_back(enemyPlane);
 /*        cout<<"************************************"<<endl;
         cout<<"velocity: "<<velocity<<"  "<<"acceleration: "<<acceleration<<endl;
         cout<<_x<<" "<<_y<<endl;

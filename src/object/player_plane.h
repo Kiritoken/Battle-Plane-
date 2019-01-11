@@ -25,7 +25,7 @@ public:
     void shootBullet();
     //TODO 碰撞检测
     bool detectCollision(FlyingObject *flyingObject) override;
-
+    bool traverse2DetectCollision()override;
     //绘制
     void render() override;
 

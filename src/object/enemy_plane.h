@@ -8,7 +8,7 @@
 
 #include "flying_object.h"
 
-class EnemyPlane : FlyingObject{
+class EnemyPlane : public FlyingObject{
 public:
     //构造函数
     EnemyPlane(float _x,float _y,float width,float height,unsigned int _texture_index);
@@ -23,7 +23,7 @@ public:
     void shootBullet();
     //TODO 碰撞检测
     bool detectCollision(FlyingObject *flyingObject) override;
-
+    bool traverse2DetectCollision()override;
     //绘制
     void render() override;
 

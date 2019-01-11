@@ -8,7 +8,7 @@ using namespace std;
 
 vector<shared_ptr<Bullet>> GameObject::bulletSet;
 vector<shared_ptr<EnemyPlane>> GameObject::enemySet;
-vector<FlyingObject*> GameObject::flyingObjectSet;
+list<shared_ptr<FlyingObject> > GameObject::flyingObjectSet;
 
 
 
@@ -38,6 +38,20 @@ void GameObject::renderEnemies() {
             iter_bullet=enemySet.erase(iter_bullet);
         } else{
             iter_bullet++;
+        }
+    }
+}
+
+
+
+void GameObject::renderFlyingObjects() {
+    for(auto iter_obj=flyingObjectSet.begin();iter_obj!=flyingObjectSet.end();){
+        (*iter_obj)->render();
+        //DEAD
+        if((*iter_obj)->getState()==DEAD){
+            iter_obj=flyingObjectSet.erase(iter_obj);
+        }else{
+            iter_obj++;
         }
     }
 }

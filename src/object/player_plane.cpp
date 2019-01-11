@@ -19,8 +19,10 @@
 PlayerPlane::PlayerPlane(float _x, float _y, float width, float height,unsigned int _texture_index):
                         FlyingObject(_x,_y,width,height,_texture_index)
 {
-    std::string backgroundImage="../res/image/plane28.png";
+    //类型
+    objectType=PLAER_PLANE;
 
+    std::string backgroundImage="../res/image/plane28.png";
     this->texture=new unsigned int();
     glGenTextures(1, this->texture);
     //绑定纹理
@@ -59,7 +61,7 @@ void PlayerPlane::move(float _x, float _y) {
 
 //TODO 碰撞检测
 bool PlayerPlane::detectCollision(FlyingObject *flyingObject) {
-    return true;
+    return false;
 }
 
 void PlayerPlane::render() {
@@ -345,7 +347,9 @@ void PlayerPlane::shootBullet() {
             auto bullet = BulletFactory::getBullet(x, float(y + f_height * 0.5), 10);
             if (bullet) {
                 bullet->setDirection(UP);
-                GameObject::bulletSet.push_back(bullet);
+                //物体类型　玩家子弹
+                bullet->setObjectType(PLAYER_BULLET);
+                GameObject::flyingObjectSet.push_back(bullet);
             }
             frameCount=0;
         }
@@ -363,4 +367,9 @@ void PlayerPlane::updateBBox() {
     left_down=glm::vec2(float(x-f_width*0.5),float(y-f_height*0.5));
     right_up=glm::vec2(float(x+f_width*0.5),float(y+f_height*0.5));
     right_down=glm::vec2(float(x+f_width*0.5),float(y-f_height*0.5));
+}
+
+
+bool PlayerPlane::traverse2DetectCollision() {
+
 }
