@@ -84,14 +84,13 @@ void EnemyFactory::genEnemyPlanes() {
     uniform_int_distribution<int> u_init(0, 1);
 
     uniform_int_distribution<int> u_num(1, 3); //随机数分布对象
-    uniform_real_distribution<float> u_velocity(1, 2);
+    uniform_real_distribution<float> u_velocity(0.1, 0.5);
     uniform_real_distribution<float> u_acceleration(0, 0.05);
     uniform_int_distribution<int> u_textureIndex(0, texID.size()-2);
 
     int gg=u_init(e);
     //随机数量
     int num=u_num(e);
-    cout<<num<<endl;
     for(int i=0;i<num;++i) {
         //随机速度
         float velocity=u_velocity(e);
@@ -99,7 +98,9 @@ void EnemyFactory::genEnemyPlanes() {
         float acceleration=u_acceleration(e);
         //随机纹理
         int Id=u_textureIndex(e);
-        //随机位置
+
+
+        //位置保证不重叠
         uniform_real_distribution<double> u_x(-Constant::screenWidth*0.5+enemyPlaneArray[Id].b_width*0.5,
                                             Constant::screenWidth*0.5-enemyPlaneArray[Id].b_width*0.5);
         auto _x=(float)u_x(e);
@@ -110,13 +111,15 @@ void EnemyFactory::genEnemyPlanes() {
         enemyPlane->setVelocity(velocity);
         enemyPlane->setAcceleration(acceleration);
         enemyPlane->setDirection(DOWN);
+        //随机生命
+        enemyPlane->setHp(Id);
         GameObject::flyingObjectSet.push_back(enemyPlane);
-        cout<<"***************随机敌机*****************"<<endl;
+/*        cout<<"***************随机敌机*****************"<<endl;
         cout<<"ID: "<<Id<<endl;
         cout<<"velocity: "<<velocity<<"  "<<"acceleration: "<<acceleration<<endl;
         cout<<_x<<" "<<_y<<endl;
         cout<<"************************************"<<endl;
-        cout<<endl;
+        cout<<endl;*/
     }
 
 }

@@ -95,6 +95,7 @@ public:
 
     OBJECT_TYPE getObjectType(){return objectType;}
     void setObjectType(OBJECT_TYPE type){ objectType=type; }
+
     /**
      * 键盘
      * @param key
@@ -129,7 +130,7 @@ protected:
     float acceleration=0;
 
     //ＨＰ　＆　Attack Power
-    float HP;
+    float HP=10;
     float attackPower=1.0f;
 
 

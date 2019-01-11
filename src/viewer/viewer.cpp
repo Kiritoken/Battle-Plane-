@@ -51,7 +51,7 @@ void Viewer::init() {
 
     //set context
     glfwMakeContextCurrent( window );
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
 
     //注册回调事件
     // framebuffer event callbacks
@@ -106,16 +106,18 @@ void Viewer::init() {
 void Viewer::start() {
     while( !glfwWindowShouldClose( window ) ) {
 
-        update();
-
+        //帧率控制
         //FPS
-        sys_cur=system_clock::now();
-        double elapsed=((duration<double>) (sys_cur - sys_last)).count();
-        if(elapsed>=1.0f){
-            fps=int(frameCount/elapsed);
-         //   cout<<"FPS: "<<fps<<endl;
+        sys_cur=glfwGetTime();
+        double elapsed=sys_cur-sys_last;
+        if(elapsed>=1.0/Constant::frameRate){
+            //１帧除以时间
+            fps=int(1/elapsed);
+           // cout<<"FPS: "<<fps<<endl;
             frameCount=0;
             sys_last=sys_cur;
+
+            update();
         } else{
             frameCount++;
         }
@@ -133,18 +135,23 @@ void Viewer::update() {
 
     //TODO 游戏场景渲染&游戏逻辑
     switch (state){
+        //TODO 载入菜单资源
         case READY:
           //  cout<<"READY"<<endl;
             break;
+
         case PLAYING:
            // cout<<"PLAYING"<<endl;
            gameScene->render();
             break;
+
+            //TODO render 暂停
         case PAUSE:
             //cout<<"PAUSE"<<endl;
             break;
+           //TODO render gameover
         case GAMEOVER:
-           // cout<<"GAMEOVER"<<endl;
+
             break;
     }
 

@@ -15,7 +15,8 @@ EnemyPlane::EnemyPlane(float _x, float _y, float width, float height,unsigned in
 {
     objectType=ENEMY_PLANE;
     updateBBox();
-    setShootingSpeedInterval(60);
+    setShootingSpeedInterval(20);
+    setHp(1.0f);
 }
 
 EnemyPlane::~EnemyPlane() {
@@ -42,7 +43,6 @@ bool EnemyPlane::detectCollision(FlyingObject *flyingObject) {
         cout<<flyingObject->getObjectType()<<" "<<p1.x<<" "<<p1.y<<" "<<p2.x<<" "<<p2.y<<endl;
         cout<<this->getObjectType()<<" "<<p3.x<<" "<<p3.y<<" "<<p4.x<<" "<<p4.y<<endl;
         cout<<"*******************************"<<endl<<endl;*/
-
         //碰撞
         return true;
     }else{
@@ -59,13 +59,17 @@ void EnemyPlane::render() {
         return;
     }
 
-    //TODO 碰撞检测 如果发生爆炸　direction=STOP state=EXPLOED
-    if(traverse2DetectCollision()){
-        setDirection(STOP);
-         setState(DEAD);
-         return;
+    if(HP<=0.0f){
+        //TODO new爆炸
+        setState(DEAD);
+        return;
     }
-   //cout<<"绘制敌机"<<endl;
+
+    /**
+     * 敌机并不需要检测碰撞　
+     * 只需要player　与　player_bullet　检测碰撞即可
+     */
+
     //启用纹理
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, EnemyFactory::texID[texture_index]);
@@ -240,13 +244,20 @@ bool EnemyPlane::traverse2DetectCollision() {
     for(auto &shared_ptr_object:GameObject::flyingObjectSet){
         auto type=shared_ptr_object->getObjectType();
         //跳过自己 ENEMY_PLANE ENEMY_BULLET PLAYERPLANE
-        if(shared_ptr_object.get()==this || type==ENEMY_PLANE || type==ENEMY_BULLET || type==PLAER_PLANE){
+        if(shared_ptr_object.get()==this || type==ENEMY_PLANE || type==ENEMY_BULLET){
             continue;
         }
         if(this->detectCollision(shared_ptr_object.get())){
-            //TODO EXPLOED STOP
-            shared_ptr_object->setState(DEAD);
-            return true;
+
+            //玩家　HP-attackPower
+            if(shared_ptr_object->getObjectType()==PLAER_PLANE){
+                shared_ptr_object->setHp(shared_ptr_object->getHp()-this->attackPower);
+                return true;
+            }else {
+                //TODO EXPLOED STOP
+                shared_ptr_object->setState(DEAD);
+                return true;
+            }
         }
     }
     return false;

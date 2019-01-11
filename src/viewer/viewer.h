@@ -9,10 +9,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <chrono>
 #include "../GameScene/game_scene.h"
 using namespace std;
-using namespace chrono;
+
 
 enum GameState{
     READY,
@@ -39,6 +38,7 @@ public:
 
     void start();
 
+    static void setViewerState(GameState _state){ state=_state; }
 private:
     //标题
     std::string _title;
@@ -46,8 +46,9 @@ private:
 
     int fps=0;
     int frameCount=0;
-    time_point<system_clock> sys_last;
-    time_point<system_clock> sys_cur;
+    //时间
+    double sys_last;
+    double sys_cur;
 
     //窗口属性
     static GLFWwindow* window;

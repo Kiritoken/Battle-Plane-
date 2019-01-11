@@ -22,7 +22,7 @@ PlayerPlane::PlayerPlane(float _x, float _y, float width, float height,unsigned 
     //类型
     objectType=PLAER_PLANE;
 
-    std::string backgroundImage="../res/image/plane28.png";
+    std::string backgroundImage="../res/image/plane23.png";
     this->texture=new unsigned int();
     glGenTextures(1, this->texture);
     //绑定纹理
@@ -61,10 +61,46 @@ void PlayerPlane::move(float _x, float _y) {
 
 //TODO 碰撞检测
 bool PlayerPlane::detectCollision(FlyingObject *flyingObject) {
-    return false;
+    glm::vec2 p1=flyingObject->left_up;
+    glm::vec2 p2=flyingObject->right_down;
+
+    glm::vec2 p3=this->left_up;
+    glm::vec2 p4=this->right_down;
+
+
+    if(!(p2.x<p3.x || p2.y>p3.y || p1.x>p4.x || p1.y <p4.y)){
+/*        cout<<"*******************************"<<endl;
+        cout<<flyingObject->getObjectType()<<" "<<p1.x<<" "<<p1.y<<" "<<p2.x<<" "<<p2.y<<endl;
+        cout<<this->getObjectType()<<" "<<p3.x<<" "<<p3.y<<" "<<p4.x<<" "<<p4.y<<endl;
+        cout<<"*******************************"<<endl<<endl;*/
+        //碰撞
+        return true;
+    }else{
+        return false;
+    }
 }
 
 void PlayerPlane::render() {
+
+
+    //检测被碰撞
+    if(this->HP<=0){
+        //TODO 先爆炸
+        this->setDirection(STOP);
+        this->setState(DEAD);
+        return;
+    }
+
+
+    //TODO 检测碰撞 　
+    if(traverse2DetectCollision()){
+        if(this->HP<=0){
+            //TODO new爆炸
+            this->setDirection(STOP);
+            this->setState(DEAD);
+            return;
+        }
+    }
 
     //启用纹理
     glEnable(GL_TEXTURE_2D);
@@ -270,7 +306,7 @@ void PlayerPlane::shootBullet() {
     if(shooting){
         if(shootingSpeedInterval<=frameCount) {
             //new bullet 添加到ＧameScene中去
-            auto bullet = BulletFactory::getBullet(x, float(y + f_height * 0.5), 10);
+            auto bullet = BulletFactory::getBullet(x, float(y + f_height * 0.5), 12);
             if (bullet) {
                 bullet->setDirection(UP);
                 //物体类型　玩家子弹
@@ -297,5 +333,29 @@ void PlayerPlane::updateBBox() {
 
 
 bool PlayerPlane::traverse2DetectCollision() {
+    for(auto &shared_ptr_object:GameObject::flyingObjectSet){
+        auto type=shared_ptr_object->getObjectType();
+        //跳过自己 和自己的子弹
+        if(shared_ptr_object.get()==this || type==PLAYER_BULLET || type==this->getObjectType()){
+            continue;
+        }
 
+        //如果与敌机||敌机子弹碰撞
+        if(this->detectCollision(shared_ptr_object.get())){
+            if(shared_ptr_object->getObjectType()==ENEMY_BULLET){
+                shared_ptr_object->setState(DEAD);
+                this->setHp(this->HP-shared_ptr_object->getAttackPower());
+            }else if(shared_ptr_object->getObjectType()==ENEMY_PLANE){
+                //敌机发生爆炸
+                //血量
+                shared_ptr_object->setHp(shared_ptr_object->getHp()-this->attackPower);
+                //敌机本身也有血量
+                this->setHp(this->HP-shared_ptr_object->getAttackPower());
+            }
+            cout<<"被击中 当前血量：　"<<this->getHp()<<endl;
+            return true;
+            //TODO BOSE 血量　攻击力计算
+        }
+    }
+    return false;
 }

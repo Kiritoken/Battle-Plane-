@@ -6,6 +6,7 @@
 #include "game_scene.h"
 #include "game_object.h"
 #include "../object/enemy_factory.h"
+#include "../viewer/viewer.h"
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -18,10 +19,9 @@ GameScene::GameScene() {
 }
 
 void GameScene::init(int width, int height) {
-    backgroundImage="../res/image/background3.bmp";
+    backgroundImage="../res/image/background5.bmp";
     this->width=width/2;
     this->height=height/2;
-
     //速度
     velocity=0.001;
     //加速度
@@ -46,14 +46,16 @@ void GameScene::init(int width, int height) {
         //glGenerateMipmap(GL_TEXTURE_2D);
     }else{
         std::cout << "背景图片加载失败" << std::endl;
+        exit(1);
     }
     stbi_image_free(data);
 
     std::cout<<"初始化战机中......"<<std::endl;
-    playerPlane=make_shared<PlayerPlane>(0,0,82,82,0);
+    playerPlane=make_shared<PlayerPlane>(0,0,82,82,23);
+    playerPlane->setHp(100);
     /**
      * 注意push完后 playerPlane的use_count=2
-     * flyingObjects erase 后 use_count=1 只有当this->~() 后才会delete
+     * flyingObjects erase playerPlane后 use_count=1 只有当this->~() 后才会delete
      * 所以erase后仍然可以控制 playerPLane
      */
     GameObject::flyingObjectSet.push_back(playerPlane);
@@ -80,35 +82,49 @@ void GameScene::loadLevelEnemy() {
 }
 
 void GameScene::render() {
-    //启用纹理
-    glEnable(GL_TEXTURE_2D);
-    //绑定纹理
-    glBindTexture(GL_TEXTURE_2D, texture);
-    //颜色混合模式
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    glBegin(GL_QUADS);
-    /**
-     * UV 纹理坐标系，原点在坐上　ｘ轴向右　ｙ轴向下
-     *
-     */
-    //print();
-    //左上
-    glTexCoord2f(left_up.x, left_up.y); glVertex3f(-width,height,0.0f);
-    //右上
-    glTexCoord2f(right_up.x, right_up.y); glVertex3f(width, height, 0.0f);
-    //右下
-    glTexCoord2f(right_down.x, right_down.y); glVertex3f(width, -height, 0.0f);
-    //左下
-    glTexCoord2f(left_down.x, left_down.y); glVertex3f(-width, -height, 0.0f);
-    glEnd();
-    glFlush();
-    glDisable(GL_TEXTURE_2D);
-    update_uv();
+
+    switch(playerPlane->getState()){
+    case ALIVE:case EXPLOED:
+        //启用纹理
+        glEnable(GL_TEXTURE_2D);
+        //绑定纹理
+        glBindTexture(GL_TEXTURE_2D, texture);
+        //颜色混合模式
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+        glBegin(GL_QUADS);
+        /**
+         * UV 纹理坐标系，原点在坐上　ｘ轴向右　ｙ轴向下
+         *
+         */
+        //print();
+        //左上
+        glTexCoord2f(left_up.x, left_up.y); glVertex3f(-width,height,0.0f);
+        //右上
+        glTexCoord2f(right_up.x, right_up.y); glVertex3f(width, height, 0.0f);
+        //右下
+        glTexCoord2f(right_down.x, right_down.y); glVertex3f(width, -height, 0.0f);
+        //左下
+        glTexCoord2f(left_down.x, left_down.y); glVertex3f(-width, -height, 0.0f);
+        glEnd();
+        glFlush();
+        glDisable(GL_TEXTURE_2D);
+        update_uv();
+
+        GameObject::renderFlyingObjects();
+        //敌机工厂制造敌机
+        loadLevelEnemy();
+
+        break;
+        case DEAD:
+            //viewer 状态置为GAMEOVER   渲染死亡画面
+            Viewer::setViewerState(GAMEOVER);
+            break;
+    }
 
 
 
-    GameObject::renderFlyingObjects();
-    loadLevelEnemy();
+
+
 
 }
 
@@ -174,4 +190,5 @@ void GameScene::keyboard_event(int key, int action, int mods) {
         }
     }
     playerPlane->keyboard_event(key,action,mods);
+    //cout<<playerPlane.use_count()<<endl;
 }

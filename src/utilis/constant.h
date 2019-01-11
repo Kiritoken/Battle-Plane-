@@ -13,6 +13,13 @@ public:
 
     //每架敌机最多一次发射的子弹数量
     const static int maxBulletsPerEnemy=3;
+
+
+    //默认帧率
+    const static int frameRate=80;
+
+
+
 };
 
 

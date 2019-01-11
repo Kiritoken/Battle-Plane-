@@ -5,6 +5,7 @@
 #include "bullet.h"
 #include "../utilis/constant.h"
 #include "bullet_factory.h"
+#include "../GameScene/game_object.h"
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -29,21 +30,52 @@ void Bullet::move(float _x, float _y) {
 
 //TODO 碰撞检测
 bool Bullet::detectCollision(FlyingObject *flyingObject) {
+    glm::vec2 p1=flyingObject->left_up;
+    glm::vec2 p2=flyingObject->right_down;
+
+    glm::vec2 p3=this->left_up;
+    glm::vec2 p4=this->right_down;
+
+
+    if(!(p2.x<p3.x || p2.y>p3.y || p1.x>p4.x || p1.y <p4.y)){
+/*        cout<<"*******************************"<<endl;
+        cout<<flyingObject->getObjectType()<<" "<<p1.x<<" "<<p1.y<<" "<<p2.x<<" "<<p2.y<<endl;
+        cout<<this->getObjectType()<<" "<<p3.x<<" "<<p3.y<<" "<<p4.x<<" "<<p4.y<<endl;
+        cout<<"*******************************"<<endl<<endl;*/
+        //碰撞
+        return true;
+    }else{
+        return false;
+    }
 }
 
 void Bullet::render() {
+    if(state==DEAD)
+        return;
 
     //判断是否出界面
     if(!(Constant::screenHeight*0.5>right_down.y && -Constant::screenHeight*0.5<left_up.y&&
        -Constant::screenWidth*0.5<right_down.x && Constant::screenWidth>left_up.x))
    {
-       setState(DEAD);
+       this->setState(DEAD);
        return;
    }
 
+
+    //只需要player_bullet进行碰撞检测
+    if(this->objectType==PLAYER_BULLET&&traverse2DetectCollision()){
+        this->setState(DEAD);
+        return;
+    }
+
+
     //启用纹理
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, BulletFactory::texID[texture_index]);
+    if(this->objectType==ENEMY_BULLET){
+        glBindTexture(GL_TEXTURE_2D, BulletFactory::enemyTexID[texture_index]);
+    }else {
+        glBindTexture(GL_TEXTURE_2D, BulletFactory::texID[texture_index]);
+    }
     //颜色混合模式
     //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
@@ -156,7 +188,6 @@ void Bullet::move() {
             y-=distance_y;
             break;
         case LEFT_UP:
-            std::cout<<"左上"<<std::endl;
             distance_x=float((velocity+0.5*acceleration)*0.707106781);
             distance_y=distance_x;
             x-=distance_x;
@@ -164,7 +195,6 @@ void Bullet::move() {
             velocity+=acceleration;
             break;
         case LEFT_DOWN:
-            std::cout<<"左下"<<std::endl;
             distance_x=float((velocity+0.5*acceleration)*0.707106781);
             distance_y=distance_x;
             x-=distance_x;
@@ -172,7 +202,6 @@ void Bullet::move() {
             velocity+=acceleration;
             break;
         case RIGHT_UP:
-            std::cout<<"右上"<<std::endl;
             distance_x=float((velocity+0.5*acceleration)*0.707106781);
             distance_y=distance_x;
             x+=distance_x;
@@ -180,7 +209,6 @@ void Bullet::move() {
             velocity+=acceleration;
             break;
         case RIGHT_DOWN:
-            std::cout<<"右下"<<std::endl;
             distance_x=float((velocity+0.5*acceleration)*0.707106781);
             distance_y=distance_x;
             x+=distance_x;
@@ -205,6 +233,20 @@ void Bullet::updateBBox() {
 }
 
 
-bool Bullet::traverse2DetectCollision() {
 
+bool Bullet::traverse2DetectCollision() {
+    for(auto &shared_ptr_object:GameObject::flyingObjectSet){
+        auto type=shared_ptr_object->getObjectType();
+        //跳过自己 和PLAYER_PLANE ENEMY_BULLET
+        if(shared_ptr_object.get()==this || type==this->getObjectType()||type==PLAER_PLANE ||type==ENEMY_BULLET){
+            continue;
+        }
+
+        //如果与敌机碰撞
+        if(this->detectCollision(shared_ptr_object.get())){
+            shared_ptr_object->setHp(shared_ptr_object->getHp()-this->attackPower);
+            return true;
+        }
+    }
+    return false;
 }

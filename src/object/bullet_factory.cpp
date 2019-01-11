@@ -126,7 +126,8 @@ void BulletFactory::genBulletsByPos(float x_min,float x_max,float _y,float _velo
     //解决首次运行只返回最大的问题
     uniform_int_distribution<int> u_init(0, 1);
     uniform_int_distribution<int> u_textureIndex(0, enemyTexID.size()-2);
-
+    //子弹随机方向
+    uniform_int_distribution<int> u_direction(0, 7);
     int gg=u_init(e);
     //随机纹理
     int Id=u_textureIndex(e);
@@ -148,8 +149,11 @@ void BulletFactory::genBulletsByPos(float x_min,float x_max,float _y,float _velo
         //下一位置
         _x+=interval;
 
+        //子弹随机方向
+        auto direction=u_direction(e);
+        //bullet->setDirection(DOWN);
+        bullet->setDirection(static_cast<FLYING_DIRECTION >(direction));
         bullet->setAcceleration(_acceleration);
-        bullet->setDirection(DOWN);
         bullet->setObjectType(ENEMY_BULLET);
         GameObject::flyingObjectSet.push_back(bullet);
     }
