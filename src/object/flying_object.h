@@ -134,7 +134,7 @@ protected:
 
 
     //射击间隔 间隔shootingSpeedInterval　帧发射　值越小发射速度越快
-    int shootingSpeedInterval;
+    int shootingSpeedInterval=20;
 
     STATE state=ALIVE;
     OBJECT_TYPE objectType=PLAER_PLANE;

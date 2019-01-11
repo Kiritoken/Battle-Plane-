@@ -79,13 +79,19 @@ shared_ptr<EnemyPlane> EnemyFactory::getEnemyPlane(float _x, float _y, unsigned 
 void EnemyFactory::genEnemyPlanes() {
     //TODO 读取关卡json数据
 
-    default_random_engine e(time(NULL));
-    uniform_int_distribution<int> u_num(0, 3); //随机数分布对象
+    default_random_engine e(time(nullptr));
+    //解决首次运行只返回最大的问题
+    uniform_int_distribution<int> u_init(0, 1);
+
+    uniform_int_distribution<int> u_num(1, 3); //随机数分布对象
     uniform_real_distribution<float> u_velocity(1, 2);
     uniform_real_distribution<float> u_acceleration(0, 0.05);
     uniform_int_distribution<int> u_textureIndex(0, texID.size()-2);
+
+    int gg=u_init(e);
     //随机数量
     int num=u_num(e);
+    cout<<num<<endl;
     for(int i=0;i<num;++i) {
         //随机速度
         float velocity=u_velocity(e);
@@ -105,11 +111,12 @@ void EnemyFactory::genEnemyPlanes() {
         enemyPlane->setAcceleration(acceleration);
         enemyPlane->setDirection(DOWN);
         GameObject::flyingObjectSet.push_back(enemyPlane);
-/*        cout<<"************************************"<<endl;
+        cout<<"***************随机敌机*****************"<<endl;
+        cout<<"ID: "<<Id<<endl;
         cout<<"velocity: "<<velocity<<"  "<<"acceleration: "<<acceleration<<endl;
         cout<<_x<<" "<<_y<<endl;
         cout<<"************************************"<<endl;
-        cout<<endl;*/
+        cout<<endl;
     }
 
 }

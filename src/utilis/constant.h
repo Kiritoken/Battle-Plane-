@@ -10,6 +10,9 @@ class Constant {
 public:
     const static int screenWidth=480;
     const static int screenHeight=640;
+
+    //每架敌机最多一次发射的子弹数量
+    const static int maxBulletsPerEnemy=3;
 };
 
 

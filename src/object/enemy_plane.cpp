@@ -15,6 +15,7 @@ EnemyPlane::EnemyPlane(float _x, float _y, float width, float height,unsigned in
 {
     objectType=ENEMY_PLANE;
     updateBBox();
+    setShootingSpeedInterval(60);
 }
 
 EnemyPlane::~EnemyPlane() {
@@ -37,10 +38,10 @@ bool EnemyPlane::detectCollision(FlyingObject *flyingObject) {
 
 
     if(!(p2.x<p3.x || p2.y>p3.y || p1.x>p4.x || p1.y <p4.y)){
-        cout<<"*******************************"<<endl;
+/*        cout<<"*******************************"<<endl;
         cout<<flyingObject->getObjectType()<<" "<<p1.x<<" "<<p1.y<<" "<<p2.x<<" "<<p2.y<<endl;
         cout<<this->getObjectType()<<" "<<p3.x<<" "<<p3.y<<" "<<p4.x<<" "<<p4.y<<endl;
-        cout<<"*******************************"<<endl<<endl;
+        cout<<"*******************************"<<endl<<endl;*/
 
         //碰撞
         return true;
@@ -91,7 +92,9 @@ void EnemyPlane::render() {
             glFlush();
             break;
     }
+
     move();
+    shootBullet();
 }
 
 float EnemyPlane::getX() {
@@ -247,4 +250,20 @@ bool EnemyPlane::traverse2DetectCollision() {
         }
     }
     return false;
+}
+
+
+
+void EnemyPlane::shootBullet() {
+    static int frameCount=0;
+    if(shootingSpeedInterval<=frameCount) {
+        //new bullet 添加到ＧameScene中去  初始速度相同
+        //TODO vecotr<Bullet>
+        BulletFactory::genBulletsByPos(left_down.x,right_down.x,float(y-f_height*0.5),this->velocity,this->acceleration);
+        frameCount=0;
+    }
+    frameCount++;
+    if(frameCount>=80){
+        frameCount=0;
+    }
 }

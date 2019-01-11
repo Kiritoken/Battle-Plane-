@@ -73,82 +73,8 @@ void PlayerPlane::render() {
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
    switch (direction) {
- /*      case LEFT:
-       case LEFT_DOWN:
-       case LEFT_UP:
-        glMatrixMode(GL_TEXTURE);
-        glLoadIdentity();
-        glMatrixMode(GL_MODELVIEW);
-
-        glPushMatrix();
-        glTranslatef(0.5, 0.5, 0.0);
-        glRotatef(90, 0, 0.0, 1.0);
-        glBegin(GL_QUADS);
-
-        *//**
-        * UV 纹理坐标系，原点在坐上　ｘ轴向右　ｙ轴向下
-        *
-        *//*
-        //print();
-        //左上
-        glTexCoord2f(0.0, 0.0);
-        glVertex3f(float(x - f_width * 0.5), float(y + f_height * 0.5), 0.0f);
-        //右上
-        glTexCoord2f(1.0, 0.0);
-        glVertex3f(float(x + f_width * 0.5), float(y + f_height * 0.5), 0.0f);
-        //右下
-        glTexCoord2f(1.0, 1.0);
-        glVertex3f(float(x + f_width * 0.5), float(y - f_height * 0.5), 0.0f);
-        //左下
-        glTexCoord2f(0.0, 1.0);
-        glVertex3f(float(x - f_width * 0.5), float(y - f_height * 0.5), 0.0f);
-
-        glEnd();
-        glPopMatrix();
-
-        glFlush();
-        glDisable(GL_TEXTURE_2D);
-     break;
-
-       case RIGHT:
-       case RIGHT_DOWN:
-       case RIGHT_UP:
-           glMatrixMode(GL_TEXTURE);
-           glLoadIdentity();
-           glMatrixMode(GL_MODELVIEW);
-
-           glPushMatrix();
-           glTranslatef(0.5, 0.5, 0.0);
-           glRotatef(-90, 0, 0.0, 1.0);
-           glBegin(GL_QUADS);
-
-           *//**
-           * UV 纹理坐标系，原点在坐上　ｘ轴向右　ｙ轴向下
-           *
-           *//*
-           //print();
-           //左上
-           glTexCoord2f(0.0, 0.0);
-           glVertex3f(float(x - f_width * 0.5), float(y + f_height * 0.5), 0.0f);
-           //右上
-           glTexCoord2f(1.0, 0.0);
-           glVertex3f(float(x + f_width * 0.5), float(y + f_height * 0.5), 0.0f);
-           //右下
-           glTexCoord2f(1.0, 1.0);
-           glVertex3f(float(x + f_width * 0.5), float(y - f_height * 0.5), 0.0f);
-           //左下
-           glTexCoord2f(0.0, 1.0);
-           glVertex3f(float(x - f_width * 0.5), float(y - f_height * 0.5), 0.0f);
-
-           glEnd();
-           glPopMatrix();
-
-           glFlush();
-           glDisable(GL_TEXTURE_2D);
-       break;*/
        default:
            glBegin(GL_QUADS);
-
            //print();
            //左上
            glTexCoord2f(0.0, 0.0);

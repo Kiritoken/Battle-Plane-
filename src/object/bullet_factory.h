@@ -28,11 +28,16 @@ class BulletFactory {
 public:
     static void loadBullet();
     static shared_ptr<Bullet> getBullet(float _x, float _y ,unsigned int level);
-    static vector<uint > texID;
+    //根据坐标随机产生子弹
+    static void genBulletsByPos(float x_min,float x_max,float y,float _velocity,float acceleration);
+    static vector<uint> texID;
+    static vector<uint> enemyTexID;
 
 private:
     static vector<BulletInfo> bulletArray;
 
+    //敌人子弹纹理
+    static vector<BulletInfo> enemyBulletArray;
 };
 
 
