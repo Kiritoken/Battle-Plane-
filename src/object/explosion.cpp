@@ -24,6 +24,7 @@ Explosion::~Explosion() {
 void Explosion::move(float _x, float _y) {
     x=_x;
     y=_y;
+    updateBBox();
 }
 
 //TODO 碰撞检测

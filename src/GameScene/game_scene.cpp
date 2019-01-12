@@ -190,6 +190,8 @@ void GameScene::keyboard_event(int key, int action, int mods) {
             addAcceration();
         }else if(key==GLFW_KEY_END){
             decreaseAcceration();
+        }else if(key=='B'){
+            playerPlane->autoFlying= !(playerPlane->autoFlying);
         }
         if(key==GLFW_KEY_SPACE &&playerPlane.use_count()==1){
             playerPlane->setState(ALIVE);

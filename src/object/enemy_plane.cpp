@@ -28,6 +28,7 @@ EnemyPlane::~EnemyPlane() {
 void EnemyPlane::move(float _x, float _y) {
     x=_x;
     y=_y;
+    updateBBox();
 }
 
 //TODO 碰撞检测
@@ -60,7 +61,10 @@ void EnemyPlane::render() {
         return;
     }
 
-    if(HP<=0.0f){
+    /**
+     * 此时状态为DEAD可能是全屏幕清屏
+     */
+    if(HP<=0.0f || state==DEAD){
         //TODO new爆炸
         auto explosion=ExplosionFactory::getExplosion(this->x,this->y,
                 this->f_width,this->f_height,this->velocity,this->acceleration,this->direction);

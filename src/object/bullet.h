@@ -19,7 +19,7 @@ public:
     //移动
     void move(float _x,float _y) override;
 
-    void move();
+    void move()override;
 
     //TODO 射击
 

@@ -19,6 +19,8 @@ class GameObject {
 public:
     static vector<shared_ptr<Bullet> > bulletSet;
     static vector<shared_ptr<EnemyPlane> >enemySet;
+    static bool clearScreenExceptBoss;
+
 
     //TODO 改为基类　List　erase 考虑子弹多了erase效率高
     static list<shared_ptr<FlyingObject> > flyingObjectSet;
@@ -26,6 +28,8 @@ public:
     static void renderBullets();
     static void renderEnemies();
     static void renderFlyingObjects();
+
+
 };
 
 

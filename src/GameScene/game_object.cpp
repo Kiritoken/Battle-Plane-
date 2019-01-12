@@ -9,7 +9,7 @@ using namespace std;
 vector<shared_ptr<Bullet>> GameObject::bulletSet;
 vector<shared_ptr<EnemyPlane>> GameObject::enemySet;
 list<shared_ptr<FlyingObject> > GameObject::flyingObjectSet;
-
+bool GameObject::clearScreenExceptBoss=false;
 
 
 
@@ -43,7 +43,9 @@ void GameObject::renderEnemies() {
 }
 
 
-
+/*
+ * 判断清屏状态
+ */
 void GameObject::renderFlyingObjects() {
     for(auto iter_obj=flyingObjectSet.begin();iter_obj!=flyingObjectSet.end();){
         (*iter_obj)->render();

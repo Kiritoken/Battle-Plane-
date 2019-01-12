@@ -8,7 +8,6 @@
 #include "bullet_factory.h"
 #include "../utilis/stb_image.h"
 #include "../object/bullet.h"
-#include "../utilis/constant.h"
 #include "../GameScene/game_object.h"
 
 vector<BulletInfo> BulletFactory::bulletArray;
@@ -113,6 +112,7 @@ shared_ptr<Bullet> BulletFactory::getBullet(float _x, float _y,unsigned int leve
         //TODO json 数据　加速度　速度
         bullet->setVelocity(15.0f);
         bullet->setAcceleration(0.0f);
+        bullet->setAttackPower(level);
         return bullet;
     }
 }
@@ -130,14 +130,18 @@ void BulletFactory::genBulletsByPos(float x_min,float x_max,float _y,float _velo
     uniform_int_distribution<int> u_init(0, 1);
     uniform_int_distribution<int> u_textureIndex(0, enemyTexID.size()-2);
     //子弹随机方向
-    uniform_int_distribution<int> u_direction(0, 7);
+    uniform_int_distribution<int> u_direction(FLYING_DIRECTION ::LEFT, FLYING_DIRECTION ::RIGHT_DOWN);
+
+    /**
+     * gg 用来解决第一次随机数总是一样的问题
+     */
     int gg=u_init(e);
     //随机纹理
     int Id=u_textureIndex(e);
 
     //随机获取正确的子弹数量 具体数量要更据飞机的宽度与子弹宽度确定
     float width=x_max-x_min;
-    uniform_int_distribution<int> u_num(1, min(Constant::maxBulletsPerEnemy,int(width/enemyBulletArray[Id].b_width))); //随机数分布对象
+    uniform_int_distribution<int> u_num(1, min(3,int(width/enemyBulletArray[Id].b_width))); //随机数分布对象
     //随机数量
     int num=u_num(e);
 

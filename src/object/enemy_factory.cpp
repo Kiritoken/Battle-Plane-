@@ -83,7 +83,7 @@ void EnemyFactory::genEnemyPlanes() {
     //解决首次运行只返回最大的问题
     uniform_int_distribution<int> u_init(0, 1);
 
-    uniform_int_distribution<int> u_num(1, 3); //随机数分布对象
+    uniform_int_distribution<int> u_num(1, 15); //随机数分布对象
     uniform_real_distribution<float> u_velocity(0.1, 0.5);
     uniform_real_distribution<float> u_acceleration(0, 0.05);
     uniform_int_distribution<int> u_textureIndex(0, texID.size()-2);

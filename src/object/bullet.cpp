@@ -11,6 +11,7 @@
 #include <GLFW/glfw3.h>
 
 
+
 Bullet::Bullet(float _x, float _y, float width, float height,unsigned int _texture_index)
                                                        :FlyingObject(_x,_y,width,height,_texture_index)
 {
@@ -26,6 +27,7 @@ Bullet::~Bullet() {
 void Bullet::move(float _x, float _y) {
     x=_x;
     y=_y;
+    updateBBox();
 }
 
 //TODO 碰撞检测
@@ -38,10 +40,6 @@ bool Bullet::detectCollision(FlyingObject *flyingObject) {
 
 
     if(!(p2.x<p3.x || p2.y>p3.y || p1.x>p4.x || p1.y <p4.y)){
-/*        cout<<"*******************************"<<endl;
-        cout<<flyingObject->getObjectType()<<" "<<p1.x<<" "<<p1.y<<" "<<p2.x<<" "<<p2.y<<endl;
-        cout<<this->getObjectType()<<" "<<p3.x<<" "<<p3.y<<" "<<p4.x<<" "<<p4.y<<endl;
-        cout<<"*******************************"<<endl<<endl;*/
         //碰撞
         return true;
     }else{
@@ -52,6 +50,12 @@ bool Bullet::detectCollision(FlyingObject *flyingObject) {
 void Bullet::render() {
     if(state==DEAD)
         return;
+
+    if(this->HP<=0.0f){
+        this->setState(DEAD);
+        return;
+    }
+
 
     //判断是否出界面
     if(!(Constant::screenHeight*0.5>right_down.y && -Constant::screenHeight*0.5<left_up.y&&
@@ -219,6 +223,15 @@ void Bullet::move() {
             velocity=10;
             break;
     }
+
+/*    if(this->getObjectType()==ENEMY_BULLET) {
+        //TODO 子弹随机方向测试
+        srand((unsigned)time(NULL));
+        int  _direction=(rand()%(RIGHT_DOWN-STOP+1))+STOP;
+        cout<<_direction<<endl;
+        this->setDirection(static_cast<FLYING_DIRECTION >(_direction));
+    }*/
+
     //更新包围盒
     updateBBox();
 }

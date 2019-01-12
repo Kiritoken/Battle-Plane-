@@ -13,19 +13,22 @@
 class PlayerPlane :public FlyingObject{
 public:
     //构造函数
+    PlayerPlane(float _x,float _y,float width,float height);
     PlayerPlane(float _x,float _y,float width,float height,unsigned int _texture_index);
      ~PlayerPlane();
 
     //移动
     void move(float _x,float _y) override;
 
-    void move();
+    void move()override;
 
     //TODO 射击
     void shootBullet();
     //TODO 碰撞检测
     bool detectCollision(FlyingObject *flyingObject) override;
     bool traverse2DetectCollision()override;
+    void autoFlyingDirectionDetect(FlyingObject *flyingObject);
+
     //绘制
     void render() override;
 
@@ -60,11 +63,21 @@ public:
     void  setState(STATE _state) override{ state=_state; }
     void updateBBox() override;
 
+
+    //自动驾驶 flag
+    bool autoFlying= false;
+
 private:
     bool pressed[349]={0};
+    //自动驾驶９个自由度
+    float correctDirection[9]={0};
+
+    //辅助用以检测自动驾驶时正确的飞行方向
+    PlayerPlane* tempPlayer;
+
+    //射击flag
     bool shooting= false;
     void confirmDirection();
-
     unsigned int* texture;
 };
 

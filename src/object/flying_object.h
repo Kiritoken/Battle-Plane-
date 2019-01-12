@@ -10,6 +10,7 @@
 
 //飞行方向枚举
 enum FLYING_DIRECTION{
+    STOP,
     LEFT,
     UP,
     LEFT_UP,
@@ -17,8 +18,7 @@ enum FLYING_DIRECTION{
     DOWN,
     RIGHT_UP,
     LEFT_DOWN,
-    RIGHT_DOWN,
-    STOP
+    RIGHT_DOWN
 };
 
 
@@ -53,6 +53,7 @@ public:
     virtual ~FlyingObject();
     //移动
     virtual void move(float _x,float _y) =0;
+    virtual void move()=0;
     virtual void updateBBox()=0;
 
     //TODO 射击
